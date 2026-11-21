@@ -163,7 +163,7 @@ def write(count=1, fmt="short"):
                     "فيديو أفقي طويل مدته 4-6 دقائق: من 16 إلى 24 مشهداً، مع قصة متسلسلة وخلاصة.")
         prompt = GUIDE.format(topic=topic, fmt_desc=fmt_desc, id=vid, fmt=fmt,
                               theme=THEMES[n % len(THEMES)], example=example)
-        for attempt in range(3):
+        for attempt in range(2):
             try:
                 raw = ask_llm(prompt)
                 raw = raw[raw.find("{"): raw.rfind("}") + 1]

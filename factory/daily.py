@@ -49,12 +49,6 @@ def main():
     os.makedirs(DONE, exist_ok=True)
     os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
 
-    # املأ الطابور إذا قلّ (يحتفظ دائماً بحلقات احتياطية)
-    has_ai = os.environ.get("GEMINI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
-    for fmt, reserve in (("short", 4), ("long", 1)):
-        if has_ai and need[fmt] and len(pool(fmt)) < need[fmt] + reserve:
-            writer.write(need[fmt] + reserve - len(pool(fmt)), fmt)
-
     # المواعيد اللي عندها فيديو جاهز مسبقاً (من فرع videos)
     taken = set()
     try:
@@ -65,12 +59,19 @@ def main():
                 taken.add(m["publish_at"][:16] + m["format"])
     except Exception as e:
         print("لا يوجد manifest سابق:", e)
+    def _key(fmt, d, t):
+        hh, mm = map(int, t.split(":"))
+        return dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()[:16] + fmt
+    slots = [x for x in slots if _key(x[0], x[1], x[2]) not in taken]
+    need = {f: sum(1 for s in slots if s[0] == f) for f in ("short", "long")}
+    # املأ الطابور إذا قلّ (يحتفظ دائماً بحلقات احتياطية)
+    has_ai = os.environ.get("GEMINI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
+    for fmt, reserve in (("short", 4), ("long", 1)):
+        if has_ai and need[fmt] and len(pool(fmt)) < need[fmt] + reserve:
+            writer.write(need[fmt] + reserve - len(pool(fmt)), fmt)
+
     report = []
     for fmt, d, t, _ in slots:
-        hh, mm = map(int, t.split(":"))
-        key = dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()[:16] + fmt
-        if key in taken:
-            continue
         files = pool(fmt)
         if not files:
             print(f"⚠️ لا يوجد سكربت {fmt} لموعد {d} {t}")
