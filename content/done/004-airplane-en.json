@@ -1,13 +1,80 @@
-{"id":"004-airplane-en","lang":"en","format":"short","theme":"purple",
-"title":"How Does a 400-Ton Plane Fly? ✈️",
-"description":"A wing doesn't fly by magic — it pushes air down, and the air pushes the wing up! Plus the famous myth that's still taught wrong in schools.",
-"tags":["how it works","airplane","aviation","physics","science","facts"],
-"thumb":{"text":"How do 400 tons|fly?","emoji":"✈️"},
-"scenes":[
- {"type":"hook","emoji":"✈️","text":"400 tons in the sky!","say":"A giant airliner can weigh more than four hundred tons, yet it rises into the sky like a feather. So what's the secret?"},
- {"type":"icon","emoji":"🪽","caption":"The angled wing","say":"It's all in the wing. Its curved shape and slight tilt push huge amounts of air downward."},
- {"type":"flow","items":[{"emoji":"💨","label":"Wing pushes air down"},{"emoji":"⬆️","label":"Air pushes wing up"},{"emoji":"✈️","label":"Lift"}],"say":"Newton's third law says every action has an equal and opposite reaction. Air pushed down pushes the wing up. That's lift."},
- {"type":"compare","right":{"emoji":"❌","label":"Myth","sub":"Air on top catches up with air below"},"left":{"emoji":"✅","label":"Truth","sub":"Air on top is much faster and never meets"},"say":"There's a famous myth that air over the wing speeds up to meet the air below. In reality, it moves much faster and the two never meet."},
- {"type":"stat","emoji":"🚀","number":900,"unit":"km per hour","label":"Typical cruising speed","say":"The faster you go, the more lift you get. That's why airliners cruise at around nine hundred kilometers per hour."},
- {"type":"outro","text":"Next: How does a screen feel your finger?","say":"Follow How It Works. Next time: how does your phone screen know exactly where your finger is?"}
-]}
+{
+ "id": "004-airplane-en",
+ "format": "short",
+ "theme": "purple",
+ "title": "How Does a 400-Ton Plane Fly? ✈️",
+ "description": "Wings don't fly by magic... they push air down and the air pushes them up! Plus, discover the famous myth taught in schools.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "airplane",
+  "flight",
+  "physics",
+  "science",
+  "facts"
+ ],
+ "thumb": {
+  "text": "How do they fly|400 tons?",
+  "emoji": "✈️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "✈️",
+   "text": "Four hundred tons in the sky!",
+   "say": "A massive plane weighing over four hundred tons floats in the sky like a feather. What is the secret?"
+  },
+  {
+   "type": "icon",
+   "emoji": "🪽",
+   "caption": "The angled wing",
+   "say": "The secret is the wing. Its curved shape and slight tilt push huge amounts of air downward."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "💨",
+     "label": "Wing pushes air down"
+    },
+    {
+     "emoji": "⬆️",
+     "label": "Air pushes wing up"
+    },
+    {
+     "emoji": "✈️",
+     "label": "Lift force"
+    }
+   ],
+   "say": "According to Newton's third law, every action has a reaction. The air pushed down forces the wing up, creating lift."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "❌",
+    "label": "Myth",
+    "sub": "Air on top meets air below"
+   },
+   "left": {
+    "emoji": "✅",
+    "label": "Fact",
+    "sub": "Top air is much faster"
+   },
+   "say": "A famous myth says air over the wing speeds up to meet the air below. The truth is it's much faster and they never meet."
+  },
+  {
+   "type": "stat",
+   "emoji": "🚀",
+   "number": 900,
+   "unit": "kilometers per hour",
+   "label": "Cruising speed",
+   "say": "More speed means more lift. That is why commercial airplanes cruise at nearly nine hundred kilometers per hour."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How screens feel your touch? Subscribe!",
+   "say": "Subscribe to How It Works! Next episode: How does your phone screen know where your finger is?"
+  }
+ ],
+ "lang": "en"
+}
