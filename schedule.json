@@ -1,0 +1,6 @@
+{
+ "timezone": "Asia/Baghdad",
+ "shorts": {"every_day": ["18:00", "23:59"]},
+ "long": {"days": ["monday", "friday"], "time": "18:00"},
+ "derived_shorts_from_long": 2
+}
