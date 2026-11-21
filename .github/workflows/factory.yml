@@ -42,6 +42,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           KAYF_VOICE: ${{ vars.KAYF_VOICE }}
           KAYF_TTS_FALLBACK: "0"
+          PYTHONUNBUFFERED: "1"
+          MANIFEST_URL: https://raw.githubusercontent.com/${{ github.repository }}/videos/manifest.json
         run: |
           ARGS="--days ${{ github.event.inputs.days || '7' }}"
           if [ -n "${{ github.event.inputs.date }}" ]; then ARGS="$ARGS --date ${{ github.event.inputs.date }}"; fi
@@ -52,11 +54,13 @@ jobs:
           shopt -s nullglob
           FILES=(out/*/*.mp4)
           [ ${#FILES[@]} -eq 0 ] && { echo "لا شيء"; exit 0; }
-          mkdir -p /tmp/v && cp out/*/*.mp4 out/*/*-thumb.jpg out/manifest.json /tmp/v/
-          cd /tmp/v && git init -q -b videos
+          git clone -q --depth 1 -b videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" /tmp/v \
+            || { mkdir -p /tmp/v && cd /tmp/v && git init -q -b videos && cd -; }
+          python factory/merge_videos.py /tmp/v out
+          cd /tmp/v
           git config user.name "kayf-bot"; git config user.email "bot@users.noreply.github.com"
-          git add -A && git commit -qm "فيديوهات $(date +%F)"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" videos
+          git checkout -q --orphan fresh && git add -A && git commit -qm "فيديوهات $(date +%F)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" fresh:videos
 
       - name: حفظ حالة الطابور
         if: always()
@@ -64,4 +68,5 @@ jobs:
           git config user.name "kayf-bot"; git config user.email "bot@users.noreply.github.com"
           git add content topics.txt
           git commit -m "حلقات $(date +%F)" || echo "لا تغييرات"
+          git pull --rebase origin main || true
           git push

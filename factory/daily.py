@@ -55,8 +55,22 @@ def main():
         if has_ai and need[fmt] and len(pool(fmt)) < need[fmt] + reserve:
             writer.write(need[fmt] + reserve - len(pool(fmt)), fmt)
 
+    # المواعيد اللي عندها فيديو جاهز مسبقاً (من فرع videos)
+    taken = set()
+    try:
+        import urllib.request
+        url = os.environ.get("MANIFEST_URL")
+        if url:
+            for m in json.load(urllib.request.urlopen(url, timeout=30)):
+                taken.add(m["publish_at"][:16] + m["format"])
+    except Exception as e:
+        print("لا يوجد manifest سابق:", e)
     report = []
     for fmt, d, t, _ in slots:
+        hh, mm = map(int, t.split(":"))
+        key = dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()[:16] + fmt
+        if key in taken:
+            continue
         files = pool(fmt)
         if not files:
             print(f"⚠️ لا يوجد سكربت {fmt} لموعد {d} {t}")

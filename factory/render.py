@@ -355,7 +355,7 @@ _SUB = {}
 
 
 def sub_img(ctx, chunk, active, size):
-    key = (id(chunk), active)
+    key = (tuple((w["w"], round(w["t"], 3)) for w in chunk), active, ctx.W, ctx.acc)
     if key in _SUB:
         return _SUB[key]
     f = font(size, 800)
