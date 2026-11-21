@@ -98,7 +98,8 @@ def mix(voice_clips, total, sfx_times, pop_times, out_wav, seed=0):
     win = int(0.25 * SR)
     env = np.convolve(env, np.ones(win) / win, mode="same")
     duck = 1.0 - 0.55 * np.clip(env / (env.max() + 1e-6) * 4, 0, 1)
-    m = music_bed(n / SR, seed) * duck
+    m = music_bed(n / SR, seed)
+    m = np.pad(m, (0, max(0, n - len(m))))[:n] * duck
     fx = np.zeros(n, dtype=np.float32)
     w = whoosh(seed)
     for st in sfx_times:
