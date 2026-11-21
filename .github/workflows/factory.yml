@@ -1,16 +1,19 @@
 name: مصنع كيف يعمل
 
-# كل يوم 1:17 ظهراً بتوقيت بغداد: يصنع فيديوهات «الغد» ويرسلها لـ Make
-# فيرفعها على يوتيوب ويجدولها حسب schedule.json:
+# كل سبت 1:17 ظهراً بتوقيت بغداد: يصنع فيديوهات الأسبوع القادم (الأحد → السبت)
+# ويضعها في فرع videos مع manifest.json، ثم يرفعها Claude ويجدولها على يوتيوب.
 #   شورت 6:00 عصراً + شورت 11:59 ليلاً كل يوم، وطويل الاثنين والجمعة 6:00 عصراً
 on:
   schedule:
-    - cron: "17 10 * * *"
+    - cron: "17 10 * * 6"
   workflow_dispatch:
     inputs:
       date:
-        description: "تاريخ يوم النشر (مثال 2026-11-23) — اتركه فارغاً لليوم التالي"
+        description: "أول يوم (مثال 2026-11-22) — فارغ = الغد"
         default: ""
+      days:
+        description: "عدد الأيام"
+        default: "7"
 
 permissions:
   contents: write
@@ -20,7 +23,7 @@ concurrency: factory
 jobs:
   make:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
 
@@ -33,37 +36,27 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg libraqm0 libfribidi0 libcairo2 > /dev/null
           pip install -q -r requirements.txt
 
-      - name: صناعة فيديوهات الغد
+      - name: صناعة فيديوهات الأسبوع
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           KAYF_VOICE: ${{ vars.KAYF_VOICE }}
           KAYF_TTS_FALLBACK: "0"
         run: |
-          if [ -n "${{ github.event.inputs.date }}" ]; then
-            python factory/daily.py --date "${{ github.event.inputs.date }}"
-          else
-            python factory/daily.py
-          fi
+          ARGS="--days ${{ github.event.inputs.days || '7' }}"
+          if [ -n "${{ github.event.inputs.date }}" ]; then ARGS="$ARGS --date ${{ github.event.inputs.date }}"; fi
+          python factory/daily.py $ARGS
 
-      - name: رفع الملفات إلى Releases
-        id: rel
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: نشر الفيديوهات في فرع videos
         run: |
           shopt -s nullglob
-          FILES=(out/*/*.mp4 out/*/*.jpg)
-          if [ ${#FILES[@]} -eq 0 ]; then echo "لا شيء"; exit 0; fi
-          TAG="d$(date +%Y%m%d-%H%M%S)"
-          gh release create "$TAG" "${FILES[@]}" --title "فيديوهات $TAG" --notes "تُنشر تلقائياً عبر Make"
-          echo "base=https://github.com/${{ github.repository }}/releases/download/$TAG" >> $GITHUB_OUTPUT
-
-      - name: إرسال إلى Make للنشر المجدول
-        if: steps.rel.outputs.base != ''
-        env:
-          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-          ASSETS_BASE: ${{ steps.rel.outputs.base }}
-        run: python factory/publish.py
+          FILES=(out/*/*.mp4)
+          [ ${#FILES[@]} -eq 0 ] && { echo "لا شيء"; exit 0; }
+          mkdir -p /tmp/v && cp out/*/*.mp4 out/*/*-thumb.jpg out/manifest.json /tmp/v/
+          cd /tmp/v && git init -q -b videos
+          git config user.name "kayf-bot"; git config user.email "bot@users.noreply.github.com"
+          git add -A && git commit -qm "فيديوهات $(date +%F)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" videos
 
       - name: حفظ حالة الطابور
         if: always()
