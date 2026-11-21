@@ -1,0 +1,13 @@
+{"id":"006-wifi-en","lang":"en","format":"short","theme":"red",
+"title":"Water Kills Your Wi-Fi?! 📶",
+"description":"Wi-Fi is just radio waves carrying zeros and ones! Learn why walls and even a fish tank weaken your signal, and the difference between 2.4 and 5 GHz.",
+"tags":["how it works","WiFi","router","internet","technology","tips"],
+"thumb":{"text":"Water kills|your Wi-Fi?","emoji":"📶"},
+"scenes":[
+ {"type":"hook","emoji":"📶","text":"Internet through the air!","say":"The internet reaches your phone through thin air, with no cable at all. So how does Wi-Fi work?"},
+ {"type":"flow","items":[{"emoji":"🌐","label":"Internet data"},{"emoji":"📡","label":"Router makes radio waves"},{"emoji":"📱","label":"Phone decodes them"}],"say":"Your router takes data from the internet, turns it into radio waves, and your phone catches them and turns them back into data."},
+ {"type":"icon","emoji":"0️⃣","caption":"Zeros and ones","say":"Every photo and video you see is really zeros and ones, carried by tiny changes in the shape of the wave."},
+ {"type":"compare","right":{"emoji":"🐢","label":"2.4 GHz","sub":"Longer range, slower"},"left":{"emoji":"🐇","label":"5 GHz","sub":"Faster, shorter range"},"say":"Most routers have two bands: two point four reaches farther but is slower, and five gigahertz is faster but has a shorter range."},
+ {"type":"fact","emoji":"🐠","text":"Water and metal absorb Wi-Fi waves","say":"Did you know water absorbs Wi-Fi waves? A fish tank, thick walls or metal can weaken your signal. So put your router high up and in the open."},
+ {"type":"outro","text":"Next: The internet under the sea!","say":"Follow How It Works. Next time: the giant cables on the ocean floor that connect the whole world."}
+]}

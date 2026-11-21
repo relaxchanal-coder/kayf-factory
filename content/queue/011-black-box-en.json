@@ -1,0 +1,13 @@
+{"id":"011-black-box-en","lang":"en","format":"short","theme":"orange",
+"title":"The Black Box… Is Actually Orange! ✈️",
+"description":"An airplane's black box isn't black, and it survives incredible fire and impact! Meet the two recorders that capture everything on board.",
+"tags":["how it works","black box","aviation","airplanes","technology","facts"],
+"thumb":{"text":"The black box|is orange!","emoji":"📦"},
+"scenes":[
+ {"type":"hook","emoji":"📦","text":"The black box is orange!","say":"An airplane's black box is actually bright orange, so it's easy to find. So what exactly does it do?"},
+ {"type":"compare","right":{"emoji":"📊","label":"Flight data recorder","sub":"Speed, altitude, pilot inputs"},"left":{"emoji":"🎙️","label":"Cockpit voice recorder","sub":"Every sound in the cockpit"},"say":"It's really two devices: one records flight data like speed, altitude and the pilot's controls, and the other records every sound in the cockpit."},
+ {"type":"stat","emoji":"🔥","number":1100,"unit":"°C for a full hour","label":"Built to survive fire and huge impacts","say":"It's built to survive eleven hundred degrees Celsius for a full hour, plus enormous impacts and pressure."},
+ {"type":"icon","emoji":"📍","caption":"Usually in the tail","say":"It's usually mounted in the tail, because that's often the part most likely to survive."},
+ {"type":"fact","emoji":"🌊","text":"Underwater it pings for at least 30 days","say":"If it lands in the sea, it starts sending an underwater signal for at least thirty days, and newer ones for ninety days, so searchers can find it."},
+ {"type":"outro","text":"Next: How does your fingerprint unlock?","say":"Subscribe to How It Works. Next time: how does your phone recognize your fingerprint out of millions?"}
+]}

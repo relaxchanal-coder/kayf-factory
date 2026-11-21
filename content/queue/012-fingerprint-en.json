@@ -1,0 +1,13 @@
+{"id":"012-fingerprint-en","lang":"en","format":"short","theme":"green",
+"title":"Your Phone Doesn't Store Your Fingerprint! 👆",
+"description":"When you register your fingerprint, your phone never saves a picture of it! See how the sensor reads your finger and turns it into secret codes.",
+"tags":["how it works","fingerprint","smartphone","security","technology","facts"],
+"thumb":{"text":"No photo of|your fingerprint!","emoji":"👆"},
+"scenes":[
+ {"type":"hook","emoji":"👆","text":"It knows you in one touch!","say":"You place your finger and the phone unlocks in a split second. How does it know it's really you?"},
+ {"type":"icon","emoji":"🌀","caption":"Ridges and valleys","say":"Your finger is covered in raised ridges with tiny gaps between them, in a pattern unlike anyone else's."},
+ {"type":"flow","items":[{"emoji":"⚡","label":"Sensor reads the charge"},{"emoji":"🗺️","label":"It maps the ridges"},{"emoji":"🔐","label":"Turns it into codes"}],"say":"The sensor has thousands of tiny points. Ridges that touch it change the electric charge, gaps don't. That's how it draws a precise map of your print."},
+ {"type":"fact","emoji":"🔐","text":"It stores key points as encrypted codes","badge":"The surprise","say":"The surprise? Your phone doesn't save a picture of your fingerprint. It only keeps key points, like where ridges split or end, as encrypted codes in a protected chip."},
+ {"type":"compare","right":{"emoji":"👯","label":"Identical twins","sub":"Nearly the same genes"},"left":{"emoji":"👆","label":"But fingerprints","sub":"Completely different"},"say":"Even identical twins, with nearly the same genes, have completely different fingerprints."},
+ {"type":"outro","text":"Next: How do chameleons change color?","say":"Follow How It Works. Next time: the chameleon… how does it change color in seconds?"}
+]}

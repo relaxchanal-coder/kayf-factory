@@ -1,0 +1,13 @@
+{"id":"013-chameleon-en","lang":"en","format":"short","theme":"green",
+"title":"Chameleons Don't Change Color to Hide! 🦎",
+"description":"Chameleons don't use pigments to change color — they use tiny crystals under their skin! And discover the real reason they change color.",
+"tags":["how it works","chameleon","animals","wildlife","nature","science"],
+"thumb":{"text":"The chameleon's|color secret","emoji":"🦎"},
+"scenes":[
+ {"type":"hook","emoji":"🦎","text":"New colors in seconds!","say":"A chameleon can change color in seconds, from green to yellow to red. How does it do that?"},
+ {"type":"icon","emoji":"💎","caption":"Crystals under the skin","say":"The secret isn't pigment! Under its skin is a layer of cells packed with tiny crystals arranged in a neat grid."},
+ {"type":"flow","items":[{"emoji":"😌","label":"Calm: crystals close"},{"emoji":"↔️","label":"Excited: they spread"},{"emoji":"🌈","label":"A new color reflects"}],"say":"When it's calm, the crystals sit close together and reflect blue and green. When it gets excited, they spread apart and reflect colors like yellow and red."},
+ {"type":"compare","right":{"emoji":"❌","label":"Popular belief","sub":"It changes color to hide"},"left":{"emoji":"✅","label":"The truth","sub":"To communicate and control heat"},"say":"People think it changes color to hide. In fact, it mostly does it to signal other chameleons, or to control its body temperature."},
+ {"type":"fact","emoji":"🌡️","text":"Darker colors soak up more sunlight","say":"Did you know when it's cold, it turns darker to absorb more sunlight, just like a black shirt heats up faster in the sun?"},
+ {"type":"outro","text":"Next: How do solar panels make power?","say":"Subscribe to How It Works. Next time: how do solar panels turn sunlight into electricity?"}
+]}

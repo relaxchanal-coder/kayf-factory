@@ -1,0 +1,13 @@
+{"id":"003-gps-en","lang":"en","format":"short","theme":"blue",
+"title":"How Does GPS Know Exactly Where You Are? 🛰️",
+"description":"Your phone never sends anything to GPS satellites — it just listens to time signals and does some clever math. And without Einstein's relativity, GPS would drift by kilometers every single day!",
+"tags":["how it works","GPS","satellites","technology","Einstein","science"],
+"thumb":{"text":"How does GPS|find you?","emoji":"🛰️"},
+"scenes":[
+ {"type":"hook","emoji":"📍","text":"Accurate to a few meters!","say":"You open your map, and within seconds your phone knows where you are, down to a few meters. So how does GPS actually work?"},
+ {"type":"stat","emoji":"🛰️","number":20200,"unit":"km above Earth","label":"About 31 satellites","say":"About thirty-one satellites orbit twenty thousand kilometers above us, and each one constantly broadcasts the exact time and its own position."},
+ {"type":"icon","emoji":"📱","caption":"Your phone only listens","say":"Your phone never sends anything to the satellites. It only receives their signals and measures how long each one took to arrive."},
+ {"type":"flow","items":[{"emoji":"⏱️","label":"Signal travel time"},{"emoji":"📏","label":"Distance to each satellite"},{"emoji":"📍","label":"Where they meet = you"}],"say":"From the travel time, it works out the distance to each satellite. With at least four satellites, those distances cross at a single point. That point is you."},
+ {"type":"fact","emoji":"🧠","text":"Satellite clocks gain 38 microseconds a day","say":"Here's the twist: thanks to Einstein's relativity, satellite clocks run thirty-eight microseconds fast every day. Without correcting that, GPS would be off by about ten kilometers a day!"},
+ {"type":"outro","text":"Next: How does a plane fly?","say":"Subscribe to How It Works. Next time: how does a plane weighing hundreds of tons stay in the sky?"}
+]}

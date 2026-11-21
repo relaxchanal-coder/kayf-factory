@@ -1,0 +1,13 @@
+{"id":"007-sea-cables-en","lang":"en","format":"short","theme":"blue",
+"title":"The Internet Doesn't Come From Satellites! 🌊",
+"description":"Most of the world's internet travels through cables on the ocean floor, about as thick as a garden hose! Meet the hidden network that runs our lives.",
+"tags":["how it works","internet","undersea cables","fiber optics","technology","facts"],
+"thumb":{"text":"The internet|is underwater!","emoji":"🌊"},
+"scenes":[
+ {"type":"hook","emoji":"🛰️","text":"Not from satellites!","say":"Think your internet comes from satellites? Actually, most of it comes from the bottom of the sea!"},
+ {"type":"stat","emoji":"🌊","number":"95%+","unit":"of intercontinental traffic","label":"Travels through undersea cables","say":"More than ninety-five percent of internet data between continents travels through cables lying on the ocean floor."},
+ {"type":"icon","emoji":"💡","caption":"Data as light","say":"Inside each cable are glass fibers thinner than a hair, and your data races through them as pulses of light."},
+ {"type":"compare","right":{"emoji":"🐍","label":"In the deep","sub":"About as thick as a garden hose"},"left":{"emoji":"🛡️","label":"Near the shore","sub":"Thicker and armored"},"say":"In the deep ocean, a cable is about as thick as a garden hose. Near the shore it's thicker and armored to protect it from ship anchors."},
+ {"type":"fact","emoji":"🦈","text":"Sharks have bitten these cables!","say":"Fun fact: sharks have bitten some of these cables, so companies wrap them in extra protective layers."},
+ {"type":"outro","text":"Comment: what should we explain next?","say":"Subscribe to How It Works, and tell us in the comments: what do you want us to explain next?"}
+]}

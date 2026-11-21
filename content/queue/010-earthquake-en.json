@@ -1,0 +1,13 @@
+{"id":"010-earthquake-en","lang":"en","format":"short","theme":"orange",
+"title":"The Ground Under You Is Moving Right Now! 🌍",
+"description":"Earth's crust is split into giant plates that move every year! See how stress builds up between them and suddenly releases as an earthquake — and why each magnitude step is so much stronger.",
+"tags":["how it works","earthquake","earth science","geology","nature","facts"],
+"thumb":{"text":"The ground|is moving!","emoji":"🌍"},
+"scenes":[
+ {"type":"hook","emoji":"🌍","text":"The ground is moving!","say":"The ground you're standing on is moving right now, and you can't feel it. But sometimes it moves suddenly… and that's an earthquake."},
+ {"type":"icon","emoji":"🧩","caption":"Tectonic plates","say":"Earth's crust isn't one piece. It's split into giant slabs called tectonic plates, floating on hot, slowly flowing rock."},
+ {"type":"stat","emoji":"💅","number":"2 to 10","unit":"centimeters a year","label":"About as fast as your nails grow","say":"These plates move two to ten centimeters a year, roughly as fast as your fingernails grow."},
+ {"type":"flow","items":[{"emoji":"🤜","label":"Plates grind together"},{"emoji":"🔒","label":"They lock, stress builds"},{"emoji":"💥","label":"Sudden slip = quake"}],"say":"Where two plates grind past each other, they get stuck and stress builds for years. Then the rock suddenly slips, releasing energy as waves that shake the ground."},
+ {"type":"fact","emoji":"📈","text":"Each step up means about 32 times more energy","say":"Did you know a magnitude seven quake isn't just a bit stronger than a six? It releases about thirty-two times more energy!"},
+ {"type":"outro","text":"Next: The black box in airplanes","say":"Follow How It Works. Next time: the airplane black box… and why it isn't actually black."}
+]}

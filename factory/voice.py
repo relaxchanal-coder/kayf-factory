@@ -4,7 +4,10 @@ import json
 import os
 import subprocess
 
-VOICE = os.environ.get("KAYF_VOICE") or "ar-SA-ZariyahNeural"
+VOICES = {"ar": os.environ.get("KAYF_VOICE") or "ar-SA-ZariyahNeural",
+          "en": os.environ.get("KAYF_VOICE_EN") or "en-US-AvaNeural"}
+VOICE = VOICES["ar"]
+LANG = ["ar"]
 RATE = os.environ.get("KAYF_RATE") or "+14%"   # أسرع قليلاً من الطبيعي
 PITCH = os.environ.get("KAYF_PITCH") or "+0Hz"
 
@@ -17,7 +20,8 @@ def duration(path):
 
 async def _tts(text, mp3):
     import edge_tts
-    com = edge_tts.Communicate(text, VOICE, rate=RATE, pitch=PITCH, boundary="WordBoundary")
+    rate = RATE if LANG[0] == "ar" else (os.environ.get("KAYF_RATE_EN") or "+6%")
+    com = edge_tts.Communicate(text, VOICES[LANG[0]], rate=rate, pitch=PITCH, boundary="WordBoundary")
     words = []
     with open(mp3, "wb") as fh:
         async for ch in com.stream():
@@ -58,7 +62,7 @@ def _gtts(text, mp3):
     tmp = tempfile.mkdtemp()
     files = []
     for i, p in enumerate(parts):
-        url = ("https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q="
+        url = (f"https://translate.google.com/translate_tts?ie=UTF-8&tl={LANG[0]}&client=tw-ob&q="
                + urllib.parse.quote(p))
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         f = os.path.join(tmp, f"{i}.mp3")

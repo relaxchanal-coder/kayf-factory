@@ -1,0 +1,13 @@
+{"id":"015-lightning-en","lang":"en","format":"short","theme":"purple",
+"title":"Lightning Is Hotter Than the Sun's Surface! ⚡",
+"description":"Lightning heats the air to about five times the temperature of the Sun's surface! See how charges build up inside clouds, and how to tell how far away a storm is.",
+"tags":["how it works","lightning","thunder","weather","science","nature"],
+"thumb":{"text":"Hotter than|the Sun!","emoji":"⚡"},
+"scenes":[
+ {"type":"hook","emoji":"⚡","text":"Hotter than the Sun!","say":"A flash of lightning heats the air to about five times hotter than the surface of the Sun! So how does lightning form?"},
+ {"type":"flow","items":[{"emoji":"🧊","label":"Ice crystals collide"},{"emoji":"➕","label":"Charges separate"},{"emoji":"⚡","label":"Huge discharge = lightning"}],"say":"Inside a storm cloud, ice crystals and hail smash together, separating charges: positive goes up, negative sinks down. When the difference gets too big, electricity bursts out as lightning."},
+ {"type":"stat","emoji":"🌡️","number":30000,"unit":"°C","label":"Air temperature inside a lightning bolt","say":"The air inside a lightning bolt reaches about thirty thousand degrees Celsius."},
+ {"type":"icon","emoji":"💥","caption":"Thunder = air exploding outward","say":"That heat makes the air expand suddenly and violently, and that explosion is the sound of thunder."},
+ {"type":"fact","emoji":"⏱️","text":"Count the seconds, divide by 3 = distance in km","badge":"Try it","say":"Light travels much faster than sound. Count the seconds between flash and thunder, divide by three, and you know how many kilometers away the storm is."},
+ {"type":"outro","text":"Next: How does wireless charging work?","say":"Subscribe to How It Works. Next time: how does your phone charge without touching a cable?"}
+]}

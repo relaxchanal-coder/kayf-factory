@@ -1,0 +1,13 @@
+{"id":"005-touchscreen-en","lang":"en","format":"short","theme":"green",
+"title":"Why Doesn't Your Screen Work With Gloves? 🧤",
+"description":"Your phone screen senses the electricity in your body! Discover the invisible grid of wires under the glass — and why gloves don't work.",
+"tags":["how it works","touchscreen","smartphone","technology","science","facts"],
+"thumb":{"text":"Why gloves|don't work?","emoji":"🧤"},
+"scenes":[
+ {"type":"hook","emoji":"🧤","text":"Why don't gloves work?","say":"Try touching your phone with gloves on. Nothing happens! But your bare finger works instantly. Why?"},
+ {"type":"icon","emoji":"🕸️","caption":"A grid of clear wires","say":"Under the glass is a grid of almost invisible wires, holding a tiny electric charge all the time."},
+ {"type":"flow","items":[{"emoji":"👆","label":"Your finger conducts"},{"emoji":"⚡","label":"The charge changes"},{"emoji":"🎯","label":"The spot is found"}],"say":"Your body conducts electricity. When you touch the screen, you draw away a little charge at that spot, and the chip knows exactly where your finger is."},
+ {"type":"stat","emoji":"🔁","number":120,"unit":"times per second or more","label":"The screen scans for touch","say":"The screen scans the whole grid more than a hundred and twenty times a second, which is why it tracks your finger so smoothly."},
+ {"type":"fact","emoji":"🌭","text":"Anything conductive can work the screen","say":"Fun fact: anything that conducts electricity works on the screen, even a sausage! Gloves are insulators, so the charge can't flow."},
+ {"type":"outro","text":"Next: How does Wi-Fi reach you?","say":"Subscribe to How It Works. Next time: how does the internet reach your phone with no wires at all?"}
+]}

@@ -97,6 +97,30 @@ def ask_llm(prompt):
     raise SystemExit("ضع GEMINI_API_KEY أو ANTHROPIC_API_KEY")
 
 
+TRANSLATE = """Translate this Arabic YouTube explainer script (channel «كيف يعمل؟») into natural, punchy
+American English for the sister channel "How It Works?". Keep the exact same JSON structure, scene
+types, emojis, theme and numbers. Rules: "say" is narration (spell out numbers in words, short energetic
+sentences, similar length); on-screen fields stay very short (max 6 words, no emojis inside text);
+title under 70 chars with one emoji; description 2-3 sentences; tags in English (first tag "how it works");
+thumb.text two short lines separated by "|"; the outro teases the next episode and asks to subscribe.
+Set "lang":"en" and "id":"{id}". Return JSON only.
+
+{src}"""
+
+
+def translate(ar_path):
+    src = json.load(open(ar_path, encoding="utf-8"))
+    vid = src["id"] + "-en"
+    raw = ask_llm(TRANSLATE.format(id=vid, src=json.dumps(src, ensure_ascii=False)))
+    d = validate(json.loads(raw[raw.find("{"): raw.rfind("}") + 1]))
+    d.update(id=vid, lang="en", format=src.get("format", "short"))
+    d["tags"] = (["how it works"] + [t for t in d.get("tags", []) if t.lower() != "how it works"])[:12]
+    path = os.path.join(QUEUE, vid + ".json")
+    json.dump(d, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print("🌐", path, "—", d["title"])
+    return path
+
+
 def validate(d):
     assert d.get("title") and d.get("scenes"), "ناقص عنوان أو مشاهد"
     sc = [s for s in d["scenes"] if s.get("type") in TYPES and s.get("say")]

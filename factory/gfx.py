@@ -19,6 +19,15 @@ THEMES = {
     "blue":   ((4, 10, 30), (16, 36, 96), (70, 150, 255), (255, 190, 60)),
 }
 WHITE = (255, 255, 255)
+LANG = ["ar"]  # لغة الحلقة الحالية: ar (من اليمين) أو en (من اليسار)
+
+
+def is_rtl():
+    return LANG[0] == "ar"
+
+
+def _dl():
+    return ("rtl", "ar") if is_rtl() else ("ltr", "en")
 
 
 # ---------- الحركة ----------
@@ -61,7 +70,8 @@ def font(size, weight=800, family="Cairo"):
 
 
 def text_width(txt, f):
-    return f.getlength(txt, direction="rtl", language="ar")
+    d, l = _dl()
+    return f.getlength(txt, direction=d, language=l)
 
 
 def wrap(txt, f, max_w):
@@ -78,10 +88,15 @@ def wrap(txt, f, max_w):
     return lines
 
 
-@lru_cache(maxsize=512)
 def text_img(txt, size, color=WHITE, weight=800, max_w=None, family="Cairo",
              shadow=True, line_gap=0.15):
     """يرجع صورة RGBA للنص (أسطر متمركزة)."""
+    return _text_img(txt, size, color, weight, max_w, family, shadow, line_gap, LANG[0])
+
+
+@lru_cache(maxsize=512)
+def _text_img(txt, size, color, weight, max_w, family, shadow, line_gap, lang):
+    dr, lg = _dl()
     f = font(size, weight, family)
     lines = wrap(txt, f, max_w) if max_w else [txt]
     asc, desc = f.getmetrics()
@@ -97,13 +112,13 @@ def text_img(txt, size, color=WHITE, weight=800, max_w=None, family="Cairo",
         for i, l in enumerate(lines):
             lw = text_width(l, f)
             sd.text(((im.width - lw) / 2 + 3, pad + i * lh + 5), l, font=f,
-                    fill=(0, 0, 0, 170), direction="rtl", language="ar")
+                    fill=(0, 0, 0, 170), direction=dr, language=lg)
         im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(5)))
         d = ImageDraw.Draw(im)
     for i, l in enumerate(lines):
         lw = text_width(l, f)
         d.text(((im.width - lw) / 2, pad + i * lh), l, font=f, fill=color,
-               direction="rtl", language="ar")
+               direction=dr, language=lg)
     bb = im.getchannel("A").point(lambda v: 255 if v > 40 else 0).getbbox()
     if bb:  # قص على حدود الحبر الفعلية ليكون التمركز بصرياً صحيحاً
         m = 14

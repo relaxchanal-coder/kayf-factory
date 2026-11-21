@@ -1,0 +1,13 @@
+{"id":"009-owl-en","lang":"en","format":"short","theme":"blue",
+"title":"Owls Hunt in Total Darkness… With Their Ears! 🦉",
+"description":"Owls don't just rely on their eyes! One ear higher than the other and a face that works like a satellite dish. Discover how owls hunt in complete darkness.",
+"tags":["how it works","owl","animals","wildlife","nature","facts"],
+"thumb":{"text":"Owls hunt|with their ears!","emoji":"🦉"},
+"scenes":[
+ {"type":"hook","emoji":"🦉","text":"Hunting in total darkness!","say":"An owl can catch a tiny mouse in pitch darkness, even one hiding under snow. How does it do that?"},
+ {"type":"icon","emoji":"👁️","caption":"Huge eyes","say":"Its eyes are huge for its head, packed with cells that are sensitive to dim light, so it sees in very low light."},
+ {"type":"fact","emoji":"🔄","text":"It can turn its head up to 270 degrees","badge":"But there's a catch","say":"But its eyes can't move inside the skull! So it turns its head up to two hundred and seventy degrees to look around."},
+ {"type":"flow","items":[{"emoji":"📡","label":"The face gathers sound"},{"emoji":"👂","label":"One ear sits higher"},{"emoji":"🎯","label":"It pinpoints the prey"}],"say":"Its real weapon is hearing. Its round face funnels sound like a satellite dish, and one ear sits higher than the other, so it can tell exactly where a sound comes from: up, down, left or right."},
+ {"type":"compare","right":{"emoji":"👁️","label":"In dim light","sub":"Uses its eyes"},"left":{"emoji":"👂","label":"In total darkness","sub":"Hunts by ear alone"},"say":"So in dim light it uses its eyes, and in total darkness it hunts by ear alone!"},
+ {"type":"outro","text":"Next: How do earthquakes happen?","say":"Subscribe to How It Works. Next time: why does the ground suddenly shake? How do earthquakes happen?"}
+]}

@@ -22,9 +22,20 @@ DONE = os.path.join(ROOT, "content", "done")
 TZ = dt.timezone(dt.timedelta(hours=3))  # بغداد
 
 
-def pool(fmt):
+def pool(fmt, lang="ar"):
     files = sorted(glob.glob(os.path.join(QUEUE, "*.json")))
-    return [f for f in files if json.load(open(f, encoding="utf-8")).get("format", "short") == fmt]
+    out = []
+    for f in files:
+        j = json.load(open(f, encoding="utf-8"))
+        if j.get("format", "short") == fmt and j.get("lang", "ar") == lang:
+            out.append(f)
+    return out
+
+
+def twin(ar_id):
+    """النسخة الإنجليزية لنفس الحلقة (تُنشر بنفس الموعد على القناة الإنجليزية)."""
+    p = os.path.join(QUEUE, f"{ar_id}-en.json")
+    return p if os.path.exists(p) else None
 
 
 def main():
@@ -50,33 +61,29 @@ def main():
     os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
 
     # المواعيد اللي عندها فيديو جاهز مسبقاً (من فرع videos)
-    taken = set()
+    taken = {}  # (موعد+نوع+لغة) -> id
     try:
         import urllib.request
         url = os.environ.get("MANIFEST_URL")
         if url:
             for m in json.load(urllib.request.urlopen(url, timeout=30)):
-                taken.add(m["publish_at"][:16] + m["format"])
+                taken[m["publish_at"][:16] + m["format"] + m.get("lang", "ar")] = m["id"]
     except Exception as e:
         print("لا يوجد manifest سابق:", e)
+
     def _key(fmt, d, t):
         hh, mm = map(int, t.split(":"))
         return dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()[:16] + fmt
-    slots = [x for x in slots if _key(x[0], x[1], x[2]) not in taken]
-    need = {f: sum(1 for s in slots if s[0] == f) for f in ("short", "long")}
+
+    missing_ar = [x for x in slots if _key(x[0], x[1], x[2]) + "ar" not in taken]
+    need = {f: sum(1 for s in missing_ar if s[0] == f) for f in ("short", "long")}
     # املأ الطابور إذا قلّ (يحتفظ دائماً بحلقات احتياطية)
     has_ai = os.environ.get("GEMINI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
     for fmt, reserve in (("short", 4), ("long", 1)):
         if has_ai and need[fmt] and len(pool(fmt)) < need[fmt] + reserve:
             writer.write(need[fmt] + reserve - len(pool(fmt)), fmt)
 
-    report = []
-    for fmt, d, t, _ in slots:
-        files = pool(fmt)
-        if not files:
-            print(f"⚠️ لا يوجد سكربت {fmt} لموعد {d} {t}")
-            continue
-        path = files[0]
+    def produce(path, d, t):
         out, meta = make.build(path)
         hh, mm = map(int, t.split(":"))
         meta["publish_at"] = dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()
@@ -84,11 +91,32 @@ def main():
                   ensure_ascii=False, indent=1)
         shutil.move(path, os.path.join(DONE, os.path.basename(path)))
         report.append(meta)
+        return meta
+
+    report = []
+    for fmt, d, t, _ in slots:
+        k = _key(fmt, d, t)
+        ar_id = taken.get(k + "ar")
+        if not ar_id:
+            files = pool(fmt)
+            if not files:
+                print(f"⚠️ لا يوجد سكربت {fmt} لموعد {d} {t}")
+                continue
+            ar_id = produce(files[0], d, t)["id"]
+        if k + "en" not in taken:
+            tw = twin(ar_id)
+            if not tw and has_ai:
+                try:
+                    tw = writer.translate(os.path.join(DONE, ar_id + ".json"))
+                except Exception as e:
+                    print("تعذّرت الترجمة:", ar_id, str(e)[:150])
+            if tw:
+                produce(tw, d, t)
     json.dump(report, open(os.path.join(ROOT, "out", "report.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     json.dump(state, open(state_p, "w"))
     # ملف التعليمات لـ Claude حتى يرفع ويجدول
-    manifest = [{"id": m["id"], "format": m["format"], "title": m["title"],
+    manifest = [{"id": m["id"], "format": m["format"], "lang": m.get("lang", "ar"), "title": m["title"],
                  "description": m["description"], "tags": m["tags"], "publish_at": m["publish_at"],
                  "video": f"{m['id']}.mp4",
                  "thumb": f"{m['id']}-thumb.jpg" if m["format"] == "long" else None,

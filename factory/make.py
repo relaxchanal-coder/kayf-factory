@@ -18,7 +18,9 @@ import voice  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GAP = 0.3  # صمت بين المشاهد
-CREDIT = "الرموز: Twemoji (CC BY 4.0) — الموسيقى والرسوم من إنتاج القناة."
+CREDIT = {"ar": "الرموز: Twemoji (CC BY 4.0) — الموسيقى والرسوم من إنتاج القناة.",
+          "en": "Icons: Twemoji (CC BY 4.0) — music and animation made by the channel."}
+LABELS = {"ar": ("العنوان", "الوصف", "الوسوم"), "en": ("Title", "Description", "Tags")}
 
 
 def build(script_path, silent=False, out_root=None):
@@ -28,6 +30,10 @@ def build(script_path, silent=False, out_root=None):
     work = os.path.join(out, "_work")
     os.makedirs(work, exist_ok=True)
     fmt = sc.get("format", "short")
+    lang = sc.get("lang", "ar")
+    voice.LANG[0] = lang
+    import gfx
+    gfx.LANG[0] = lang
     W, H = (1080, 1920) if fmt == "short" else (1920, 1080)
 
     # 1) الصوت لكل مشهد
@@ -63,7 +69,7 @@ def build(script_path, silent=False, out_root=None):
 
     # 3) الرسوم والفيديو
     mp4 = os.path.join(out, f"{vid}.mp4")
-    render.render_video(W, H, sc.get("theme", "cyan"), timeline, total, wav, mp4, work)
+    render.render_video(W, H, sc.get("theme", "cyan"), timeline, total, wav, mp4, work, lang=lang)
 
     # 4) الصورة المصغّرة
     thumb.thumbnail(sc, os.path.join(out, f"{vid}-thumb.jpg"))
@@ -75,13 +81,14 @@ def build(script_path, silent=False, out_root=None):
     title = sc["title"] + (" #shorts" if fmt == "short" and "#" not in sc["title"] else "")
     desc = sc.get("description", "").strip()
     hashtags = " ".join("#" + x.replace(" ", "_") for x in tags[:5])
-    desc = f"{desc}\n\n{hashtags}\n\n{CREDIT}"
+    desc = f"{desc}\n\n{hashtags}\n\n{CREDIT[lang]}"
     meta = {"id": vid, "title": title[:100], "description": desc, "tags": tags,
-            "format": fmt, "duration": round(total, 1)}
+            "format": fmt, "lang": lang, "duration": round(total, 1)}
     json.dump(meta, open(os.path.join(out, "meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     with open(os.path.join(out, "انسخ-للنشر.txt"), "w", encoding="utf-8") as fh:
-        fh.write(f"العنوان:\n{meta['title']}\n\nالوصف:\n{desc}\n\nالوسوم:\n{', '.join(tags)}\n")
+        a, b, c = LABELS[lang]
+        fh.write(f"{a}:\n{meta['title']}\n\n{b}:\n{desc}\n\n{c}:\n{', '.join(tags)}\n")
     shutil.rmtree(work, ignore_errors=True)
     print(f"[{vid}] جاهز ← {mp4}")
     return out, meta

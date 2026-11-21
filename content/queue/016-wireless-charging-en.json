@@ -1,0 +1,13 @@
+{"id":"016-wireless-charging-en","lang":"en","format":"short","theme":"cyan",
+"title":"How Does Your Phone Charge With No Cable? 🔋",
+"description":"Wireless charging runs on magnetism! Meet the two copper coils hidden in your charger and your phone — and why wireless charging makes your phone warmer.",
+"tags":["how it works","wireless charging","smartphone","battery","technology","facts"],
+"thumb":{"text":"Charging with|no cable?","emoji":"🔋"},
+"scenes":[
+ {"type":"hook","emoji":"🔋","text":"Charging with no cable!","say":"You set your phone on the pad and it starts charging with no cable at all. So how does power travel through the air?"},
+ {"type":"compare","right":{"emoji":"🌀","label":"Coil in the charger","sub":"Creates a magnetic field"},"left":{"emoji":"🌀","label":"Coil in the phone","sub":"Turns it into electricity"},"say":"Inside the charger is a coil of copper wire, and inside your phone is another coil just like it."},
+ {"type":"flow","items":[{"emoji":"🔌","label":"Changing current in pad"},{"emoji":"🧲","label":"Changing magnetic field"},{"emoji":"⚡","label":"Current in phone coil"}],"say":"The charger sends a current that flips direction very fast, creating a changing magnetic field. That field produces an electric current in the phone's coil, and the battery charges."},
+ {"type":"fact","emoji":"🎯","text":"The two coils must line up exactly","say":"That's why you have to place your phone in just the right spot. If the coils drift apart, charging slows down or stops."},
+ {"type":"compare","right":{"emoji":"🔌","label":"Cable charging","sub":"Faster and cooler"},"left":{"emoji":"🔋","label":"Wireless charging","sub":"Easier but loses energy as heat"},"say":"Some energy is lost as heat, so wireless charging is usually slower and makes your phone warmer than charging with a cable."},
+ {"type":"outro","text":"What should we explain next? Comment!","say":"Follow How It Works, and tell us in the comments: what do you want us to explain next?"}
+]}

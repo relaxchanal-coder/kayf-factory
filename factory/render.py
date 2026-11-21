@@ -7,12 +7,22 @@ from concurrent.futures import ProcessPoolExecutor
 
 from PIL import Image, ImageDraw, ImageFilter
 
+import gfx
 from gfx import (THEMES, WHITE, blit, circle, clamp, ease_in_out, ease_out_back,
-                 ease_out_cubic, emoji_img, font, glow, prog, rounded, text_img,
+                 ease_out_cubic, emoji_img, font, glow, is_rtl, prog, rounded, text_img,
                  text_width)
 
 FPS = 30
-CHANNEL = os.environ.get("KAYF_CHANNEL") or "كيف يعمل؟"
+CHANNELS = {"ar": os.environ.get("KAYF_CHANNEL") or "كيف يعمل؟",
+            "en": os.environ.get("KAYF_CHANNEL_EN") or "How It Works?"}
+
+
+def channel():
+    return CHANNELS[gfx.LANG[0]]
+
+
+SUBSCRIBE = {"ar": "اشترك", "en": "Subscribe"}
+DIDYOU = {"ar": "هل تعلم؟", "en": "Did you know?"}
 
 
 class Ctx:
@@ -173,15 +183,17 @@ def sc_steps(L, ctx, sc, t, dur):
         card = rounded(cw, ch, int(30 * s), (255, 255, 255, 34 if active else 20),
                        ctx.acc + (255 if active else 90,), max(2, int(3 * s)))
         blit(L, card, cx, cy, 1, q)
-        right = cx + cw / 2
+        sg = 1 if is_rtl() else -1  # جهة الرقم: يمين للعربي، يسار للإنجليزي
+        edge = cx + sg * cw / 2
         d = int(ch * 0.66)
-        blit(L, circle(d, ctx.acc + (255,)), right - d / 2 - 20 * s, cy, 1, q)
+        ncx = edge - sg * (d / 2 + 20 * s)
+        blit(L, circle(d, ctx.acc + (255,)), ncx, cy, 1, q)
         num = text_img(str(i + 1), int(d * 0.62), ctx.bg1, 900, shadow=False)
-        blit(L, num, right - d / 2 - 20 * s, cy + 2 * s, 1, q)
+        blit(L, num, ncx, cy + 2 * s, 1, q)
         tx = text_img(it, int((54 if len(it) < 26 else 44) * s), WHITE, 800,
                       int(cw - d - 70 * s), shadow=False)
-        tr = right - d - 40 * s
-        blit(L, tx, tr - tx.width / 2 + 16 * s, cy, 1, q)
+        tr = edge - sg * (d + 40 * s)
+        blit(L, tx, tr - sg * (tx.width / 2 - 16 * s), cy, 1, q)
 
 
 def _fmt(v):
@@ -217,20 +229,23 @@ def sc_compare(L, ctx, sc, t, dur):
     cw = int((ctx.W * 0.42) if ctx.portrait else ctx.W * 0.3)
     chh = int(560 * s)
     gapx = ctx.W * 0.25 if ctx.portrait else ctx.W * 0.19
-    for side, it, st in ((1, a, 0.0), (-1, b, max(0.6, dur * 0.42))):
+    first = 1 if is_rtl() else -1
+    for side, it, st in ((first, a, 0.0), (-first, b, max(0.6, dur * 0.42))):
         q = ease_out_back(prog(t, st, 0.5))
         if q <= 0:
             continue
         cx = ctx.W / 2 + side * gapx
-        col = ctx.acc if side == 1 else ctx.acc2
+        col = ctx.acc if side == first else ctx.acc2
         blit(L, rounded(cw, chh, int(40 * s), (255, 255, 255, 22), col + (255,),
                         max(3, int(4 * s))), cx, ctx.cy, q, clamp(q))
         blit(L, emoji_img(it.get("emoji", "❓"), int(200 * s)), cx, ctx.cy - 120 * s, q)
-        lb = text_img(it.get("label", ""), int(56 * s), col, 900, int(cw - 40 * s))
-        blit(L, lb, cx, ctx.cy + 50 * s, q, clamp(q))
+        lsz = 56 if len(it.get("label", "")) < 18 else 46
+        lb = text_img(it.get("label", ""), int(lsz * s), col, 900, int(cw - 40 * s))
+        ltop = ctx.cy + 10 * s
+        blit(L, lb, cx, ltop + lb.height / 2, q, clamp(q))
         if it.get("sub"):
-            sb = text_img(it["sub"], int(46 * s), WHITE, 700, int(cw - 50 * s))
-            blit(L, sb, cx, ctx.cy + 150 * s + sb.height / 4, q, clamp(q))
+            sb = text_img(it["sub"], int(42 * s), WHITE, 700, int(cw - 50 * s))
+            blit(L, sb, cx, ltop + lb.height + 6 * s + sb.height / 2, q, clamp(q))
     q = ease_out_back(prog(t, 0.3, 0.5))
     blit(L, circle(int(130 * s), (255, 255, 255, 255)), ctx.W / 2, ctx.cy, q)
     blit(L, text_img("VS", int(58 * s), ctx.bg1, 900, shadow=False), ctx.W / 2, ctx.cy, q)
@@ -263,8 +278,9 @@ def sc_flow(L, ctx, sc, t, dur):
     else:
         node = 200 * s
         step = min(ctx.W * 0.22, ctx.W * 0.8 / max(1, n - 1)) if n > 1 else 0
-        x0 = ctx.W / 2 + (n - 1) * step / 2
-        pos = [(x0 - i * step, ctx.cy - 40 * s) for i in range(n)]
+        sg = 1 if is_rtl() else -1
+        x0 = ctx.W / 2 + sg * (n - 1) * step / 2
+        pos = [(x0 - sg * i * step, ctx.cy - 40 * s) for i in range(n)]
     for i, it in enumerate(items):
         q = ease_out_back(prog(t, times[i], 0.45))
         x, y = pos[i]
@@ -274,7 +290,8 @@ def sc_flow(L, ctx, sc, t, dur):
             if ctx.portrait:
                 _arrow(L, x, py + node * 0.62, x, y - node * 0.62, ctx.acc2, 9 * s, fr)
             else:
-                _arrow(L, px - node * 0.62, y, x + node * 0.62, y, ctx.acc2, 9 * s, fr)
+                sg = 1 if is_rtl() else -1
+                _arrow(L, px - sg * node * 0.62, y, x + sg * node * 0.62, y, ctx.acc2, 9 * s, fr)
         if q <= 0:
             continue
         blit(L, circle(int(node * 1.12), (255, 255, 255, 26), ctx.acc + (255,),
@@ -293,7 +310,7 @@ def sc_flow(L, ctx, sc, t, dur):
 def sc_fact(L, ctx, sc, t, dur):
     s = ctx.s
     q = ease_out_back(prog(t, 0, 0.45))
-    badge = text_img(sc.get("badge", "هل تعلم؟"), int(58 * s), ctx.bg1, 900, shadow=False)
+    badge = text_img(sc.get("badge") or DIDYOU[gfx.LANG[0]], int(58 * s), ctx.bg1, 900, shadow=False)
     pill = rounded(badge.width + int(40 * s), badge.height, int(badge.height / 2), ctx.acc2 + (255,))
     by = ctx.cy - 380 * s
     blit(L, pill, ctx.W / 2, by, q, clamp(q), rot=math.sin(t * 3) * 2)
@@ -316,20 +333,21 @@ def sc_outro(L, ctx, sc, t, dur):
     s = ctx.s
     p = ease_out_back(prog(t, 0, 0.6))
     blit(L, rays(int(1000 * s), ctx.acc), ctx.W / 2, ctx.cy - 160 * s, 1, p, rot=t * 15)
-    name = text_img(CHANNEL, int(150 * s), ctx.acc, 900, family="Lalezar")
+    name = text_img(channel(), int(150 * s), ctx.acc, 900, family="Lalezar")
     blit(L, name, ctx.W / 2, ctx.cy - 160 * s, p, clamp(p))
     if sc.get("text"):
         tx = text_img(sc["text"], int(58 * s), WHITE, 800, int(ctx.maxw))
         blit(L, tx, ctx.W / 2, ctx.cy + 10 * s, 1, ease_out_cubic(prog(t, 0.3, 0.4)))
     q = ease_out_back(prog(t, 0.6, 0.5))
     pulse = 1 + 0.05 * math.sin(t * 6)
-    btn_t = text_img("اشترك", int(70 * s), WHITE, 900, shadow=False)
+    btn_t = text_img(SUBSCRIBE[gfx.LANG[0]], int(70 * s), WHITE, 900, shadow=False)
     bw, bh = btn_t.width + int(200 * s), int(130 * s)
     by = ctx.cy + 190 * s
     blit(L, rounded(bw, bh, bh // 2, (230, 20, 40, 255)), ctx.W / 2, by, q * pulse)
-    blit(L, btn_t, ctx.W / 2 + 40 * s, by + 4 * s, q * pulse)
+    sg = 1 if is_rtl() else -1
+    blit(L, btn_t, ctx.W / 2 + sg * 40 * s, by + 4 * s, q * pulse)
     bell = emoji_img("🔔", int(80 * s))
-    blit(L, bell, ctx.W / 2 - bw / 2 + 80 * s, by, q * pulse, rot=math.sin(t * 14) * 18)
+    blit(L, bell, ctx.W / 2 - sg * (bw / 2 - 80 * s), by, q * pulse, rot=math.sin(t * 14) * 18)
 
 
 SCENES = {"hook": sc_hook, "icon": sc_icon, "steps": sc_steps, "stat": sc_stat,
@@ -355,7 +373,7 @@ _SUB = {}
 
 
 def sub_img(ctx, chunk, active, size):
-    key = (tuple((w["w"], round(w["t"], 3)) for w in chunk), active, ctx.W, ctx.acc)
+    key = (tuple((w["w"], round(w["t"], 3)) for w in chunk), active, ctx.W, ctx.acc, gfx.LANG[0])
     if key in _SUB:
         return _SUB[key]
     f = font(size, 800)
@@ -368,18 +386,24 @@ def sub_img(ctx, chunk, active, size):
     im = Image.new("RGBA", (int(total + 60 * ctx.s), h + int(24 * ctx.s)), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     d.rounded_rectangle([0, 0, im.width - 1, im.height - 1], int(26 * ctx.s), fill=(0, 0, 0, 140))
-    x = im.width - 30 * ctx.s
+    rtl = is_rtl()
+    x = im.width - 30 * ctx.s if rtl else 30 * ctx.s
     y = (im.height - (asc + desc)) / 2 - 2 * ctx.s
     for i, w in enumerate(chunk):
-        x -= ws[i] + padx * 0.5
+        if rtl:
+            x -= ws[i] + padx * 0.5
         if i == active:
             d.rounded_rectangle([x - padx * 0.5, y + 4 * ctx.s, x + ws[i] + padx * 0.5,
                                  y + asc + desc + 2 * ctx.s], int(16 * ctx.s), fill=ctx.acc + (255,))
             col = ctx.bg1
         else:
             col = WHITE
-        d.text((x, y), w["w"], font=f, fill=col, direction="rtl", language="ar")
-        x -= space + padx * 0.5
+        dr, lg = gfx._dl()
+        d.text((x, y), w["w"], font=f, fill=col, direction=dr, language=lg)
+        if rtl:
+            x -= space + padx * 0.5
+        else:
+            x += ws[i] + space + padx
     _SUB[key] = im
     return im
 
@@ -414,7 +438,7 @@ def make_frame(ctx, timeline, T, total):
             break
     # العلامة واسم القناة وشريط التقدم
     s = ctx.s
-    tag = text_img(CHANNEL, int(40 * s), WHITE, 900, family="Lalezar", shadow=False)
+    tag = text_img(channel(), int(40 * s), WHITE, 900, family="Lalezar", shadow=False)
     pill = rounded(tag.width + int(30 * s), tag.height + int(4 * s), int(30 * s), (0, 0, 0, 110),
                    ctx.acc + (200,), max(2, int(2 * s)))
     ty = ctx.H * (0.075 if ctx.portrait else 0.07)
@@ -429,7 +453,8 @@ def make_frame(ctx, timeline, T, total):
 
 
 def _render_part(args):
-    W, H, theme, timeline, start_f, end_f, total, path = args
+    W, H, theme, timeline, start_f, end_f, total, path, lang = args
+    gfx.LANG[0] = lang
     ctx = Ctx(W, H, theme)
     for sc in timeline:
         sc["_chunks"] = chunks(sc.get("words", []), ctx, int((60 if ctx.portrait else 52) * ctx.s))
@@ -444,7 +469,7 @@ def _render_part(args):
     return path
 
 
-def render_video(W, H, theme, timeline, total, wav, out_mp4, workdir, workers=None):
+def render_video(W, H, theme, timeline, total, wav, out_mp4, workdir, workers=None, lang="ar"):
     workers = workers or max(1, (os.cpu_count() or 2))
     nf = int(total * FPS)
     per = math.ceil(nf / workers)
@@ -452,7 +477,7 @@ def render_video(W, H, theme, timeline, total, wav, out_mp4, workdir, workers=No
     for i in range(workers):
         a, b = i * per, min(nf, (i + 1) * per)
         if a < b:
-            jobs.append((W, H, theme, timeline, a, b, total, os.path.join(workdir, f"part{i:02d}.mp4")))
+            jobs.append((W, H, theme, timeline, a, b, total, os.path.join(workdir, f"part{i:02d}.mp4"), lang))
     with ProcessPoolExecutor(len(jobs)) as ex:
         parts = list(ex.map(_render_part, jobs))
     lst = os.path.join(workdir, "parts.txt")
