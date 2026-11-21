@@ -4,9 +4,9 @@ import json
 import os
 import subprocess
 
-VOICE = os.environ.get("KAYF_VOICE", "ar-SA-ZariyahNeural")
-RATE = os.environ.get("KAYF_RATE", "+14%")   # أسرع قليلاً من الطبيعي
-PITCH = os.environ.get("KAYF_PITCH", "+0Hz")
+VOICE = os.environ.get("KAYF_VOICE") or "ar-SA-ZariyahNeural"
+RATE = os.environ.get("KAYF_RATE") or "+14%"   # أسرع قليلاً من الطبيعي
+PITCH = os.environ.get("KAYF_PITCH") or "+0Hz"
 
 
 def duration(path):

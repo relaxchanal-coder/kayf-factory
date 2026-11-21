@@ -12,7 +12,7 @@ from gfx import (THEMES, WHITE, blit, circle, clamp, ease_in_out, ease_out_back,
                  text_width)
 
 FPS = 30
-CHANNEL = os.environ.get("KAYF_CHANNEL", "كيف يعمل؟")
+CHANNEL = os.environ.get("KAYF_CHANNEL") or "كيف يعمل؟"
 
 
 class Ctx:
