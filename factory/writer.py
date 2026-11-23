@@ -22,13 +22,17 @@ GUIDE = """أنت كاتب محتوى لقناة يوتيوب عربية اسم�
 الصيغة: {fmt_desc}
 
 القواعد:
-- لغة عربية فصحى بسيطة وقريبة من الناس، جمل قصيرة وحماسية، بدون حشو.
+- اللغة: عربية فصحى سليمة 100% في كل الحقول (say والعنوان والوصف ونصوص الشاشة)، بأسلوب
+  المعلّق الوثائقي: واضحة وسهلة وحماسية، جمل قصيرة، بدون حشو.
+- ممنوع أي كلمة عامية أو لهجة، مثل: مو، ليش، شلون، اللي، هاي، هذي، شنو، شي، وايد، كلش،
+  هسه، ماكو، اكو، يخلّي، الجاية، تطلع، بس (بمعنى فقط)، مثل ما، حيل. استخدم بدلها: ليس، لماذا،
+  كيف، الذي/التي، هذه، ماذا، شيء، كثيراً، جداً، الآن، لا يوجد، يوجد، يجعل، القادمة، تخرج، فقط، كما.
 - الدقة العلمية أهم شيء: لا تخترع أرقاماً. إذا لم تكن متأكداً من رقم فلا تستخدم مشهد stat.
 - أول مشهد hook يشد الانتباه في أول 3 ثوانٍ بسؤال أو مفاجأة.
-- كل مشهد فيه "say" (ما تقوله المعلقة، 12 إلى 35 كلمة) + عناصر الشاشة.
-- الأرقام في "say" تُكتب بالحروف لتنطقها المعلقة صح، وفي حقول الشاشة بالأرقام.
+- كل مشهد فيه "say" (ما يقوله المعلّق، 12 إلى 35 كلمة) + عناصر الشاشة.
+- الأرقام في "say" تُكتب بالحروف لينطقها المعلّق صحيحة، وفي حقول الشاشة بالأرقام.
 - نصوص الشاشة قصيرة جداً (حتى 6 كلمات) وبدون إيموجي داخلها.
-- آخر مشهد outro يدعو للاشتراك ويشوّق للحلقة الجاية.
+- آخر مشهد outro يدعو للاشتراك ويشوّق للحلقة القادمة.
 - لا تكرر نفس نوع المشهد مرتين متتاليتين.
 
 أنواع المشاهد المسموحة (type):
@@ -121,6 +125,55 @@ def translate(ar_path):
     return path
 
 
+# كلمات عامية شائعة (عراقية/خليجية/شامية/مصرية) — وجود أي منها يعني أن النص ليس فصحى
+DIALECT = re.compile(r"(?<![\u0600-\u06FF])(مو|ليش|شلون|اشلون|اللي|هاي|هذي|شنو|شي|وايد|كلش|هسه|هسّه|"
+                     r"ماكو|اكو|يخلي|يخلّي|تخلي|تخلّي|الجاية|الجاي|بس|حيل|هيك|ليه|ازاي|عشان|علشان|"
+                     r"رح|تطلع|يطلع|نشوف|تشوف|يشوف|يقدر|تقدر|جوّا|جوا|"
+                     r"فد|هواية|شوي|شوية)(?![\u0600-\u06FF])")
+FUSHA_FIX = """أعد كتابة كل النصوص العربية في JSON التالي بالعربية الفصحى السليمة تماماً، دون أي كلمة
+عامية أو لهجة (مثل: {words}). حافظ على نفس البنية والمعنى والطول تقريباً والإيموجي والأرقام
+وأنواع المشاهد. أرجع JSON فقط.
+
+{src}"""
+
+
+def dialect_words(d):
+    """يرجع الكلمات العامية الموجودة في النصوص المنطوقة والمكتوبة."""
+    texts = [d.get("title", ""), d.get("description", "")]
+    for s in d.get("scenes", []):
+        texts.append(s.get("say", ""))
+        for k in ("text", "caption", "title", "unit", "label"):
+            if isinstance(s.get(k), str):
+                texts.append(s[k])
+        for it in s.get("items", []) or []:
+            texts.append(it.get("label", "") if isinstance(it, dict) else str(it))
+        for side in ("right", "left"):
+            if isinstance(s.get(side), dict):
+                texts += [s[side].get("label", ""), s[side].get("sub", "")]
+    return sorted({m.group(1) for t in texts for m in DIALECT.finditer(t or "")})
+
+
+def to_fusha(d):
+    """إذا تسللت كلمات عامية، نطلب من النموذج إعادة الصياغة بالفصحى (محاولتان)."""
+    for _ in range(2):
+        bad = dialect_words(d)
+        if not bad:
+            return d
+        print("تحويل إلى الفصحى، كلمات عامية:", "، ".join(bad))
+        try:
+            raw = ask_llm(FUSHA_FIX.format(words="، ".join(bad), src=json.dumps(d, ensure_ascii=False)))
+            fixed = validate(json.loads(raw[raw.find("{"): raw.rfind("}") + 1]))
+            fixed.update({k: d[k] for k in ("id", "format", "topic", "lang") if k in d})
+            d = fixed
+        except Exception as e:
+            print("تعذّر التحويل:", str(e)[:150])
+            break
+    left = dialect_words(d)
+    if left:
+        print("⚠️ بقيت كلمات قد تكون عامية:", "، ".join(left))
+    return d
+
+
 def validate(d):
     assert d.get("title") and d.get("scenes"), "ناقص عنوان أو مشاهد"
     sc = [s for s in d["scenes"] if s.get("type") in TYPES and s.get("say")]
@@ -193,6 +246,7 @@ def write(count=1, fmt="short"):
                 raw = raw[raw.find("{"): raw.rfind("}") + 1]
                 d = validate(json.loads(raw))
                 d.update(id=vid, format=fmt, topic=topic)
+                d = to_fusha(d)
                 path = os.path.join(QUEUE, vid + ".json")
                 json.dump(d, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
                 print("✍️ ", path, "—", d["title"])
