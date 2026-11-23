@@ -1,13 +1,78 @@
-{"id":"008-camera-en","lang":"en","format":"short","theme":"purple",
-"title":"Your Phone Camera Can't See Color! 📸",
-"description":"Your camera sensor is color-blind! So how are your photos in color? Meet the millions of tiny cells and the clever filter inside your phone's camera.",
-"tags":["how it works","phone camera","photography","technology","smartphone","facts"],
-"thumb":{"text":"Your camera|is color-blind!","emoji":"📸"},
-"scenes":[
- {"type":"hook","emoji":"📸","text":"Your camera is color-blind!","say":"Believe it or not, your phone's camera sensor can't see color at all. So how do your photos come out in color?"},
- {"type":"flow","items":[{"emoji":"☀️","label":"Light comes in"},{"emoji":"🔍","label":"The lens focuses it"},{"emoji":"🔲","label":"The sensor measures it"}],"say":"Light enters through the lens, which focuses it onto a tiny chip called the sensor, and the sensor measures how much light hits it."},
- {"type":"stat","emoji":"🔲","number":12000000,"unit":"tiny light cells","label":"In a 12-megapixel sensor","say":"The sensor has millions of tiny cells. Twelve megapixels means twelve million cells, and each one only measures brightness."},
- {"type":"steps","title":"The color trick","items":["A colored filter on each cell","Red, green or blue","The chip blends them smartly"],"say":"The trick is a colored filter over each cell: red, green or blue. Then your phone's processor blends neighboring cells to work out the real color of every point."},
- {"type":"fact","emoji":"💚","text":"Half the filters are green, like our eyes","say":"Did you know half of these filters are green? That's because the human eye is most sensitive to green."},
- {"type":"outro","text":"Next: How do owls see in the dark?","say":"Follow How It Works. Next time: how does an owl see in total darkness?"}
-]}
+{
+ "id": "008-camera-en",
+ "lang": "en",
+ "format": "short",
+ "theme": "purple",
+ "title": "Your Phone Camera Can't See Color! 📸",
+ "description": "Your camera sensor is color-blind! So how are your photos in color? Meet the millions of tiny cells and the clever filter inside your phone's camera.",
+ "tags": [
+  "how it works",
+  "phone camera",
+  "photography",
+  "technology",
+  "smartphone",
+  "facts"
+ ],
+ "thumb": {
+  "text": "Your camera|is color-blind!",
+  "emoji": "📸"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "📸",
+   "text": "Your camera is color-blind!",
+   "say": "Believe it or not, your phone's camera sensor can't see color at all. So how do your photos come out in color?",
+   "image": "smartphone camera lens closeup"
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "☀️",
+     "label": "Light comes in"
+    },
+    {
+     "emoji": "🔍",
+     "label": "The lens focuses it"
+    },
+    {
+     "emoji": "🔲",
+     "label": "The sensor measures it"
+    }
+   ],
+   "say": "Light enters through the lens, which focuses it onto a tiny chip called the sensor, and the sensor measures how much light hits it."
+  },
+  {
+   "type": "stat",
+   "emoji": "🔲",
+   "number": 12000000,
+   "unit": "tiny light cells",
+   "label": "In a 12-megapixel sensor",
+   "say": "The sensor has millions of tiny cells. Twelve megapixels means twelve million cells, and each one only measures brightness.",
+   "image": "File:CMOS image sensor chip-scale package oblique.jpg"
+  },
+  {
+   "type": "steps",
+   "title": "The color trick",
+   "items": [
+    "A colored filter on each cell",
+    "Red, green or blue",
+    "The chip blends them smartly"
+   ],
+   "say": "The trick is a colored filter over each cell: red, green or blue. Then your phone's processor blends neighboring cells to work out the real color of every point."
+  },
+  {
+   "type": "fact",
+   "emoji": "💚",
+   "text": "Half the filters are green, like our eyes",
+   "say": "Did you know half of these filters are green? That's because the human eye is most sensitive to green.",
+   "image": "Bayer filter sensor macro"
+  },
+  {
+   "type": "outro",
+   "text": "Next: How do owls see in the dark?",
+   "say": "Follow How It Works. Next time: how does an owl see in total darkness?"
+  }
+ ]
+}

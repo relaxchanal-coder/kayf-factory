@@ -1,13 +1,73 @@
-{"id":"014-solar-en","lang":"en","format":"short","theme":"orange",
-"title":"How Does Sunlight Become Electricity? ☀️",
-"description":"Solar panels have no moving parts, yet they make electricity! See how sunlight knocks electrons loose inside silicon and powers your home.",
-"tags":["how it works","solar power","solar panels","electricity","science","energy"],
-"thumb":{"text":"Sunlight into|electricity!","emoji":"☀️"},
-"scenes":[
- {"type":"hook","emoji":"☀️","text":"Power from light alone!","say":"A solar panel has no moving parts, yet it makes electricity from sunlight. How?"},
- {"type":"icon","emoji":"🔷","caption":"Silicon cells","say":"The panel is made of cells of silicon, the same element found in sand, but specially treated."},
- {"type":"flow","items":[{"emoji":"☀️","label":"Light hits the cell"},{"emoji":"⚛️","label":"Electrons break free"},{"emoji":"⚡","label":"They flow = current"}],"say":"When sunlight hits a cell, it knocks electrons loose. The cell is built in two layers that push those electrons in one direction, and that flow is an electric current."},
- {"type":"icon","emoji":"🔌","caption":"The inverter","say":"But this is direct current, and your home uses alternating current, so a device called an inverter converts it."},
- {"type":"stat","emoji":"📊","number":"20%","unit":"of the sunlight","label":"Becomes electricity in home panels","say":"Today's home panels turn roughly twenty percent of the sunlight that hits them into electricity."},
- {"type":"outro","text":"Next: How do lightning and thunder form?","say":"Follow How It Works. Next time: lightning and thunder… and why we see the flash before we hear the boom."}
-]}
+{
+ "id": "014-solar-en",
+ "lang": "en",
+ "format": "short",
+ "theme": "orange",
+ "title": "How Does Sunlight Become Electricity? ☀️",
+ "description": "Solar panels have no moving parts, yet they make electricity! See how sunlight knocks electrons loose inside silicon and powers your home.",
+ "tags": [
+  "how it works",
+  "solar power",
+  "solar panels",
+  "electricity",
+  "science",
+  "energy"
+ ],
+ "thumb": {
+  "text": "Sunlight into|electricity!",
+  "emoji": "☀️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "☀️",
+   "text": "Power from light alone!",
+   "say": "A solar panel has no moving parts, yet it makes electricity from sunlight. How?",
+   "image": "File:Rooftop Solar Panels 3KW.jpg"
+  },
+  {
+   "type": "icon",
+   "emoji": "🔷",
+   "caption": "Silicon cells",
+   "say": "The panel is made of cells of silicon, the same element found in sand, but specially treated.",
+   "image": "File:Klassieren.jpg"
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "☀️",
+     "label": "Light hits the cell"
+    },
+    {
+     "emoji": "⚛️",
+     "label": "Electrons break free"
+    },
+    {
+     "emoji": "⚡",
+     "label": "They flow = current"
+    }
+   ],
+   "say": "When sunlight hits a cell, it knocks electrons loose. The cell is built in two layers that push those electrons in one direction, and that flow is an electric current."
+  },
+  {
+   "type": "icon",
+   "emoji": "🔌",
+   "caption": "The inverter",
+   "say": "But this is direct current, and your home uses alternating current, so a device called an inverter converts it."
+  },
+  {
+   "type": "stat",
+   "emoji": "📊",
+   "number": "20%",
+   "unit": "of the sunlight",
+   "label": "Becomes electricity in home panels",
+   "say": "Today's home panels turn roughly twenty percent of the sunlight that hits them into electricity."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How do lightning and thunder form?",
+   "say": "Follow How It Works. Next time: lightning and thunder… and why we see the flash before we hear the boom."
+  }
+ ]
+}

@@ -38,7 +38,61 @@ def twin(ar_id):
     return p if os.path.exists(p) else None
 
 
+def rebuild(since):
+    """إعادة صنع الفيديوهات المجدولة (من تاريخ since فما بعد) بالمحرك الحالي، بنفس النصوص.
+    تُعلَّم replace=true حتى تحذف مهمة الرفع النسخة القديمة المجدولة وترفع الجديدة."""
+    import urllib.request
+    cfg = json.load(open(os.path.join(ROOT, "schedule.json"), encoding="utf-8"))
+    en_cfg = cfg.get("en") or {}
+    old = json.load(urllib.request.urlopen(os.environ["MANIFEST_URL"], timeout=30))
+    report = []
+    stamp = dt.datetime.now(TZ).isoformat(timespec="minutes")
+    for m in old:
+        if m.get("lang", "ar") != "ar":
+            continue
+        at = dt.datetime.fromisoformat(m["publish_at"])
+        if at.date() < since:
+            continue
+        for path, lang in ((os.path.join(DONE, m["id"] + ".json"), "ar"),
+                           (os.path.join(DONE, m["id"] + "-en.json"), "en")):
+            if not os.path.exists(path):
+                print("⚠️ لا يوجد سكربت:", path)
+                continue
+            when = at
+            if lang == "en":
+                nt = (en_cfg.get(m["format"]) or {}).get(at.strftime("%H:%M"))
+                if nt:
+                    hh, mm = map(int, nt.split(":"))
+                    d = at.date() + (dt.timedelta(days=1) if en_cfg.get("next_day") else dt.timedelta())
+                    when = dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ)
+            out, meta = make.build(path)
+            meta.update(publish_at=when.isoformat(), replace=True, rebuilt_at=stamp)
+            json.dump(meta, open(os.path.join(out, "meta.json"), "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            report.append(meta)
+    return report
+
+
+def write_manifest(report):
+    json.dump(report, open(os.path.join(ROOT, "out", "report.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=1)
+    manifest = [{"id": m["id"], "format": m["format"], "lang": m.get("lang", "ar"), "title": m["title"],
+                 "description": m["description"], "tags": m["tags"], "publish_at": m["publish_at"],
+                 "video": f"{m['id']}.mp4",
+                 "thumb": f"{m['id']}-thumb.jpg" if m["format"] == "long" else None,
+                 "status": "pending", **({"replace": True, "rebuilt_at": m["rebuilt_at"]} if m.get("replace") else {})}
+                for m in report]
+    json.dump(manifest, open(os.path.join(ROOT, "out", "manifest.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=1)
+
+
 def main():
+    if "--rebuild" in sys.argv:
+        os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
+        report = rebuild(dt.date.fromisoformat(sys.argv[sys.argv.index("--rebuild") + 1]))
+        write_manifest(report)
+        print(f"✅ أُعيد صنع {len(report)} فيديو")
+        return
     if "--date" in sys.argv:
         day = dt.date.fromisoformat(sys.argv[sys.argv.index("--date") + 1])
     else:
