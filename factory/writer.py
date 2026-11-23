@@ -34,6 +34,10 @@ GUIDE = """أنت كاتب محتوى لقناة يوتيوب عربية اسم�
 - نصوص الشاشة قصيرة جداً (حتى 6 كلمات) وبدون إيموجي داخلها.
 - آخر مشهد outro يدعو للاشتراك ويشوّق للحلقة القادمة.
 - لا تكرر نفس نوع المشهد مرتين متتاليتين.
+- صور حقيقية: أضف الحقل "image" لنصف المشاهد تقريباً (hook وicon وfact وstat، وright/left في compare)،
+  قيمته كلمات بحث إنجليزية دقيقة (2-5 كلمات) تصف صورة فوتوغرافية حقيقية للشيء نفسه، مثل
+  "microwave oven magnetron" أو "lightning strike night sky". للفضاء والكواكب ابدأ بـ "nasa "
+  مثل "nasa Jupiter Juno". لا تطلب صور أشخاص أو شعارات أو رسوم بيانية.
 
 أنواع المشاهد المسموحة (type):
 hook: {{emoji, text}}
@@ -118,6 +122,14 @@ def translate(ar_path):
     raw = ask_llm(TRANSLATE.format(id=vid, src=json.dumps(src, ensure_ascii=False)))
     d = validate(json.loads(raw[raw.find("{"): raw.rfind("}") + 1]))
     d.update(id=vid, lang="en", format=src.get("format", "short"))
+    # الصور نفسها للتوأمين (البحث بالإنجليزية أصلاً)
+    for a, b in zip(src.get("scenes", []), d.get("scenes", [])):
+        if a.get("type") == b.get("type"):
+            for k in ("right", "left"):
+                if isinstance(a.get(k), dict) and isinstance(b.get(k), dict) and a[k].get("image"):
+                    b[k]["image"] = a[k]["image"]
+            if a.get("image"):
+                b["image"] = a["image"]
     d["tags"] = (["how it works"] + [t for t in d.get("tags", []) if t.lower() != "how it works"])[:12]
     path = os.path.join(QUEUE, vid + ".json")
     json.dump(d, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

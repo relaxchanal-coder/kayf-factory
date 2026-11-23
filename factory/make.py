@@ -12,6 +12,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import audio  # noqa: E402
+import images  # noqa: E402
 import render  # noqa: E402
 import style as stylemod  # noqa: E402
 import thumb  # noqa: E402
@@ -38,6 +39,8 @@ def build(script_path, silent=False, out_root=None):
     W, H = (1080, 1920) if fmt == "short" else (1920, 1080)
     st = stylemod.pick(vid, sc)
     print(f"[{vid}] الستايل: {stylemod.describe(st)}")
+    # صور حقيقية مجانية للمشاهد التي فيها "image" (ويكيميديا/ناسا) — اختيارية
+    photo_credits = images.attach(sc["scenes"])
 
     # 1) الصوت لكل مشهد
     timeline, clips, t = [], [], 0.4
@@ -72,7 +75,18 @@ def build(script_path, silent=False, out_root=None):
 
     # 3) الرسوم والفيديو
     mp4 = os.path.join(out, f"{vid}.mp4")
-    render.render_video(W, H, st, timeline, total, wav, mp4, work, lang=lang)
+    engine = os.environ.get("KAYF_ENGINE", "web")
+    done = False
+    if engine == "web":
+        try:
+            import webrender
+            webrender.render_video(W, H, st, timeline, total, wav, mp4, work, lang=lang)
+            done = True
+            print(f"[{vid}] المحرك: موشن HTML")
+        except Exception as e:  # لا Chrome أو خطأ: نرجع للمحرك القديم حتى لا يتوقف المصنع
+            print(f"[{vid}] ⚠️ المحرك الجديد فشل ({str(e)[:200]})، أستخدم القديم")
+    if not done:
+        render.render_video(W, H, st, timeline, total, wav, mp4, work, lang=lang)
 
     # 4) الصورة المصغّرة
     thumb.thumbnail(sc, os.path.join(out, f"{vid}-thumb.jpg"), style=st)
@@ -84,7 +98,8 @@ def build(script_path, silent=False, out_root=None):
     title = sc["title"] + (" #shorts" if fmt == "short" and "#" not in sc["title"] else "")
     desc = sc.get("description", "").strip()
     hashtags = " ".join("#" + x.replace(" ", "_") for x in tags[:5])
-    desc = f"{desc}\n\n{hashtags}\n\n{CREDIT[lang]}"
+    photos = images.credit_line(photo_credits, lang)
+    desc = f"{desc}\n\n{hashtags}\n\n{CREDIT[lang]}" + (f"\n{photos}" if photos else "")
     meta = {"id": vid, "title": title[:100], "description": desc, "tags": tags,
             "format": fmt, "lang": lang, "duration": round(total, 1)}
     json.dump(meta, open(os.path.join(out, "meta.json"), "w", encoding="utf-8"),

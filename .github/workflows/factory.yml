@@ -35,6 +35,8 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg libraqm0 libfribidi0 libcairo2 > /dev/null
           pip install -q -r requirements.txt
+          # المحرك الجديد يرسم بمتصفح Chrome (موجود مسبقاً على أجهزة GitHub)؛ وإلا نثبّت Chromium
+          command -v google-chrome >/dev/null || python -m playwright install --with-deps chromium
 
       - name: صناعة فيديوهات الأسبوع
         env:
@@ -45,6 +47,8 @@ jobs:
           KAYF_VOICE: ${{ vars.KAYF_MALE_VOICE }}
           KAYF_VOICE_EN: ${{ vars.KAYF_VOICE_EN }}
           KAYF_TTS_FALLBACK: "0"
+          # web = محرك الموشن الجديد (HTML)، classic = المحرك القديم
+          KAYF_ENGINE: ${{ vars.KAYF_ENGINE || 'web' }}
           PYTHONUNBUFFERED: "1"
           MANIFEST_URL: https://raw.githubusercontent.com/${{ github.repository }}/videos/manifest.json
         run: |
