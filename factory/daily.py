@@ -83,7 +83,19 @@ def main():
         if has_ai and need[fmt] and len(pool(fmt)) < need[fmt] + reserve:
             writer.write(need[fmt] + reserve - len(pool(fmt)), fmt)
 
+    cfg = json.load(open(os.path.join(ROOT, "schedule.json"), encoding="utf-8"))
+    en_cfg = cfg.get("en") or {}
+
+    def en_slot(fmt, d, t):
+        """موعد القناة الإنجليزية: مساء أمريكا بدل نفس موعد العربي (من schedule.json)."""
+        nt = (en_cfg.get(fmt) or {}).get(t)
+        if not nt:
+            return d, t
+        return (d + dt.timedelta(days=1) if en_cfg.get("next_day") else d), nt
+
     def produce(path, d, t):
+        if json.load(open(path, encoding="utf-8")).get("lang") == "en":
+            d, t = en_slot(fmt_of(path), d, t)
         out, meta = make.build(path)
         hh, mm = map(int, t.split(":"))
         meta["publish_at"] = dt.datetime(d.year, d.month, d.day, hh, mm, tzinfo=TZ).isoformat()
@@ -92,6 +104,9 @@ def main():
         shutil.move(path, os.path.join(DONE, os.path.basename(path)))
         report.append(meta)
         return meta
+
+    def fmt_of(path):
+        return json.load(open(path, encoding="utf-8")).get("format", "short")
 
     report = []
     for fmt, d, t, _ in slots:
@@ -103,7 +118,9 @@ def main():
                 print(f"⚠️ لا يوجد سكربت {fmt} لموعد {d} {t}")
                 continue
             ar_id = produce(files[0], d, t)["id"]
-        if k + "en" not in taken:
+        ed, et = en_slot(fmt, d, t)
+        if (k + "en" not in taken and _key(fmt, ed, et) + "en" not in taken
+                and ar_id + "-en" not in taken.values()):
             tw = twin(ar_id)
             if not tw and has_ai:
                 try:

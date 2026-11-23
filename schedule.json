@@ -1,6 +1,28 @@
 {
  "timezone": "Asia/Baghdad",
- "shorts": {"every_day": ["18:00", "23:59"]},
- "long": {"days": ["monday", "friday"], "time": "18:00"},
- "derived_shorts_from_long": 2
+ "shorts": {
+  "every_day": [
+   "18:00",
+   "23:59"
+  ]
+ },
+ "long": {
+  "days": [
+   "monday",
+   "friday"
+  ],
+  "time": "18:00"
+ },
+ "derived_shorts_from_long": 2,
+ "en": {
+  "_note": "مواعيد القناة الإنجليزية (بتوقيت بغداد): مساء أمريكا. كل موعد عربي ← موعد إنجليزي في اليوم التالي",
+  "short": {
+   "18:00": "03:00",
+   "23:59": "05:00"
+  },
+  "long": {
+   "18:00": "04:00"
+  },
+  "next_day": true
+ }
 }
