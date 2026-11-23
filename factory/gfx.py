@@ -20,6 +20,7 @@ THEMES = {
 }
 WHITE = (255, 255, 255)
 LANG = ["ar"]  # لغة الحلقة الحالية: ar (من اليمين) أو en (من اليسار)
+SHADOW = [True]  # ظل النصوص الافتراضي (يُطفأ مع اللوحات الفاتحة)
 
 
 def is_rtl():
@@ -89,8 +90,10 @@ def wrap(txt, f, max_w):
 
 
 def text_img(txt, size, color=WHITE, weight=800, max_w=None, family="Cairo",
-             shadow=True, line_gap=0.15):
+             shadow=None, line_gap=0.15):
     """يرجع صورة RGBA للنص (أسطر متمركزة)."""
+    if shadow is None:
+        shadow = SHADOW[0]
     return _text_img(txt, size, color, weight, max_w, family, shadow, line_gap, LANG[0])
 
 

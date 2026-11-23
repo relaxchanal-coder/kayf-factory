@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import audio  # noqa: E402
 import render  # noqa: E402
+import style as stylemod  # noqa: E402
 import thumb  # noqa: E402
 import voice  # noqa: E402
 
@@ -35,6 +36,8 @@ def build(script_path, silent=False, out_root=None):
     import gfx
     gfx.LANG[0] = lang
     W, H = (1080, 1920) if fmt == "short" else (1920, 1080)
+    st = stylemod.pick(vid, sc)
+    print(f"[{vid}] الستايل: {stylemod.describe(st)}")
 
     # 1) الصوت لكل مشهد
     timeline, clips, t = [], [], 0.4
@@ -69,12 +72,12 @@ def build(script_path, silent=False, out_root=None):
 
     # 3) الرسوم والفيديو
     mp4 = os.path.join(out, f"{vid}.mp4")
-    render.render_video(W, H, sc.get("theme", "cyan"), timeline, total, wav, mp4, work, lang=lang)
+    render.render_video(W, H, st, timeline, total, wav, mp4, work, lang=lang)
 
     # 4) الصورة المصغّرة
-    thumb.thumbnail(sc, os.path.join(out, f"{vid}-thumb.jpg"))
+    thumb.thumbnail(sc, os.path.join(out, f"{vid}-thumb.jpg"), style=st)
     if fmt == "short":
-        thumb.thumbnail(sc, os.path.join(out, f"{vid}-cover.jpg"), 1080, 1920)
+        thumb.thumbnail(sc, os.path.join(out, f"{vid}-cover.jpg"), 1080, 1920, style=st)
 
     # 5) العنوان والوصف والوسوم
     tags = sc.get("tags", [])

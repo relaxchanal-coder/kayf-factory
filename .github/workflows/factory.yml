@@ -40,7 +40,10 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          KAYF_VOICE: ${{ vars.KAYF_VOICE }}
+          # الصوت الافتراضي رجالي (ar-SA-HamedNeural / en-US-AndrewMultilingualNeural).
+          # لتغييره: Variables ← KAYF_MALE_VOICE أو KAYF_VOICE_EN
+          KAYF_VOICE: ${{ vars.KAYF_MALE_VOICE }}
+          KAYF_VOICE_EN: ${{ vars.KAYF_VOICE_EN }}
           KAYF_TTS_FALLBACK: "0"
           PYTHONUNBUFFERED: "1"
           MANIFEST_URL: https://raw.githubusercontent.com/${{ github.repository }}/videos/manifest.json
