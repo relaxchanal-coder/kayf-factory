@@ -1,0 +1,36 @@
+name: تجربة المحرك الجديد
+
+# تشغيل يدوي فقط: يصنع حلقة تجريبية بالمحرك الجديد ويحفظها كملف مرفق (لا ينشر شيئاً)
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: "ملف الحلقة"
+        default: "content/done/014-solar.json"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: تثبيت الأدوات
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg libraqm0 libfribidi0 libcairo2 > /dev/null
+          pip install -q -r requirements.txt
+          command -v google-chrome >/dev/null || python -m playwright install --with-deps chromium
+      - name: صناعة الحلقة
+        env:
+          KAYF_ENGINE: web
+          KAYF_TTS_FALLBACK: "0"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          nproc
+          time python factory/make.py "${{ github.event.inputs.script }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: engine-test
+          path: out/*/*.mp4
