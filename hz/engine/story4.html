@@ -58,7 +58,7 @@ function camAt(T){
   return [p[0]+(c[0]-p[0])*k, p[1]+(c[1]-p[1])*k, Math.exp(lz)];
 }
 function drawMap(T, vis){
-  mc.clearRect(0,0,W,H); if(vis<=0) return;
+  mc.clearRect(0,0,W,H); if(vis<=0||!SC.some(s=>s.type==='map')) return null;
   const [lon,lat,sc]=camAt(T);
   const proj=d3.geoMercator().center([lon,lat]).scale(sc).translate([W/2,V?H*0.3:H/2+30]);
   const path=d3.geoPath(proj,mc);
