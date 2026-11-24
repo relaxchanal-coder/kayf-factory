@@ -1,0 +1,21 @@
+name: hz-images
+on:
+  workflow_dispatch:
+    inputs:
+      q: {description: "query json in hz/", required: true}
+      name: {description: "output folder name", required: true}
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 hz/fetch_imgs.py hz/${{ inputs.q }} img/${{ inputs.name }}
+      - run: |
+          git config user.name hz-bot; git config user.email hz-bot@users.noreply.github.com
+          git fetch origin hz-img || true
+          mv img /tmp/img
+          git checkout -B hz-img origin/hz-img 2>/dev/null || git checkout --orphan hz-img
+          git rm -rfq . 2>/dev/null || true
+          mkdir -p img && cp -r /tmp/img/* img/
+          git add img && git commit -qm "imgs ${{ inputs.name }}" && git push -q origin hz-img
