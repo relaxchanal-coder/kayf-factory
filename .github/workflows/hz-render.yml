@@ -1,0 +1,36 @@
+name: hz-render
+on:
+  workflow_dispatch:
+    inputs:
+      dirs: {description: 'JSON list of story dirs in hz/w1', required: true}
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        d: ${{ fromJSON(inputs.dirs) }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji >/dev/null
+      - run: cd hz && npm install --silent
+      - run: pip install -q playwright edge-tts certifi
+      - name: render
+        env: {HZ_ROOT: "${{ github.workspace }}/hz", NM: "${{ github.workspace }}/hz/node_modules"}
+        run: cd hz/w1 && ./render.sh ${{ matrix.d }} 4 && ls -la ${{ matrix.d }}/final.mp4
+      - uses: actions/upload-artifact@v4
+        with: {name: "${{ matrix.d }}", path: "hz/w1/${{ matrix.d }}/final.mp4", retention-days: 7}
+  publish:
+    needs: render
+    if: always()
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {path: out}
+      - run: |
+          ls -R out | head -50
+          git config --global user.name hz-bot; git config --global user.email hz-bot@users.noreply.github.com
+          git clone -q --depth 1 --branch hz-videos https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} pub 2>/dev/null || (git clone -q --depth 1 https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} pub && cd pub && git checkout --orphan hz-videos && git rm -rfq . && cd ..)
+          for d in out/*; do n=$(basename $d); cp $d/final.mp4 pub/$n.mp4; done
+          cd pub && git add -A && git commit -qm "hz videos" && git push -q origin hz-videos

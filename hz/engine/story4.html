@@ -1,0 +1,249 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Q;src:url(__QFONT__)}
+@font-face{font-family:A;src:url(__AFONT__)}
+html,body{margin:0;width:__W__px;height:__H__px;overflow:hidden;background:#000;direction:rtl}
+canvas{position:absolute;left:0;top:0}
+#st{position:absolute;inset:0}
+.a{position:absolute}
+.q{font-family:Q;color:var(--g);text-shadow:0 0 30px rgba(var(--ac),.55),0 6px 18px #000}
+.card{position:absolute;border-radius:var(--rad);background:linear-gradient(135deg,rgba(var(--ac),.20),rgba(var(--ac),.05) 60%,rgba(255,255,255,.03));border:2px solid rgba(var(--ac),.5);box-shadow:0 20px 50px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.ph{position:absolute;overflow:hidden}
+.ph img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover}
+</style>
+<script src="__D3__"></script><script>__ILL__</script><script src="__TOPO__"></script>
+</head><body><canvas id="bg" width="__W__" height="__H__"></canvas><canvas id="map" width="__W__" height="__H__"></canvas><div id="st"></div>
+<script>
+const D=__DATA__, WORLD=__WORLD__;
+const V=D.o==='v', W=V?1080:1920,H=V?1920:1080, INK='#050507';
+const bgc=document.getElementById('bg').getContext('2d'), mc=document.getElementById('map').getContext('2d'), st=document.getElementById('st');
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), pr=(t,a,d)=>cl((t-a)/d);
+const eo=x=>1-Math.pow(1-cl(x),3), eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eb=x=>{x=cl(x);if(x>=1)return 1;return 1+2.7*Math.pow(x-1,3)+1.7*Math.pow(x-1,2)};
+function rng(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
+const norm=s=>String(s).replace(/[ً-ْـ،,.:؟!«»]/g,'');
+const SC=D.scenes;
+function cueT(sc,frag,fb){if(!frag)return fb??sc.start;for(const w of sc.words){if(norm(w.w).includes(norm(frag)))return sc.voice+w.t;}return fb??sc.voice+0.5}
+// ---------- الألوان: لكل مشهد لوحة ألوان ----------
+const PALS=[['#f2c14e','#ffe7a3'],['#ff5e7a','#ffc2cd'],['#2fe0a5','#b5ffe5'],['#4aa8ff','#c4e3ff'],['#b07cff','#e3d3ff'],['#ff8a4c','#ffd2b8'],['#19d3da','#b8f7f9'],['#ff4fd8','#ffc6f3']];
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,k)=>a.map((v,i)=>Math.round(v+(b[i]-v)*k));
+const OFF=D.poff||0;
+function palOf(i){return PALS[(i*3+OFF)%PALS.length].map(hx)}
+let GOLD,GOLD2,AC,AC2,LAND,BG0,BG1,RAD=D.rad||'22px';
+function setPal(T){let i=0;SC.forEach((s,k)=>{if(T>=s.start)i=k});const k=eio(pr(T,SC[i].start-.15,.8));
+  const p=i>0?palOf(i-1):palOf(i),c=palOf(i);const a=mix(p[0],c[0],k),b=mix(p[1],c[1],k);
+  AC=a.join(','),AC2=b.join(',');GOLD=`rgb(${AC})`;GOLD2=`rgb(${AC2})`;
+  LAND=`rgb(${mix(a,[8,8,12],.8).join(',')})`;BG0=mix(a,[6,6,10],.84);BG1=mix(a,[3,3,6],.94);
+  st.style.setProperty('--g',GOLD);st.style.setProperty('--ac',AC);st.style.setProperty('--rad',RAD);}
+// ---------- الخريطة ----------
+const land=topojson.feature(WORLD,WORLD.objects.countries);
+const borders=topojson.mesh(WORLD,WORLD.objects.countries,(a,b)=>a!==b);
+const grat=d3.geoGraticule().step([15,15])();
+// كل نقاط الرحلة بالترتيب مع زمن ظهورها
+const ROUTE=[]; const LABELS=[]; const SPOKES=[];
+SC.forEach((sc,i)=>{ if(sc.type!=='map') return;
+  if(sc.hub){const t=cueT(sc,sc.hub.cue);LABELS.push({n:sc.hub.n,ll:sc.hub.ll,t,big:1,scene:i});}
+  (sc.pts||[]).forEach(p=>{const t=cueT(sc,p.cue);
+    if(p.spoke&&sc.hub) SPOKES.push({a:p.ll,b:sc.hub.ll,t,scene:i}); else if(!p.noroute) ROUTE.push({ll:p.ll,t});
+    if(p.n) LABELS.push({n:p.n,ll:p.ll,t,big:p.big,scene:i});});
+});
+function camAt(T){
+  let cur=-1,prev=-1;
+  SC.forEach((s,i)=>{if(s.type==='map'&&T>=s.start-0.0) {prev=cur; cur=i;}});
+  if(cur<0) cur=SC.findIndex(s=>s.type==='map');
+  const c=SC[cur].cam, p=prev>=0?SC[prev].cam:c;
+  const k=eio(pr(T,SC[cur].start,1.8));
+  const lz=Math.log(p[2])+(Math.log(c[2])-Math.log(p[2]))*k;
+  return [p[0]+(c[0]-p[0])*k, p[1]+(c[1]-p[1])*k, Math.exp(lz)];
+}
+function drawMap(T, vis){
+  mc.clearRect(0,0,W,H); if(vis<=0) return;
+  const [lon,lat,sc]=camAt(T);
+  const proj=d3.geoMercator().center([lon,lat]).scale(sc).translate([W/2,V?H*0.3:H/2+30]);
+  const path=d3.geoPath(proj,mc);
+  mc.globalAlpha=vis;
+  mc.beginPath();path(grat);mc.strokeStyle=`rgba(${AC},.07)`;mc.lineWidth=1;mc.stroke();
+  mc.beginPath();path(land);mc.fillStyle=LAND;mc.fill();
+  mc.beginPath();path(borders);mc.strokeStyle=`rgba(${AC},.22)`;mc.lineWidth=1;mc.stroke();
+  mc.beginPath();path(land);mc.strokeStyle=`rgba(${AC},.45)`;mc.lineWidth=1.4;mc.stroke();
+  // المسار
+  for(let k=1;k<ROUTE.length;k++){
+    const a=ROUTE[k-1],b=ROUTE[k]; const t0=Math.max(a.t,b.t-1.6), q=pr(T,t0,b.t-t0||0.01); if(q<=0) continue;
+    const ip=d3.geoInterpolate(a.ll,b.ll), n=48;
+    mc.beginPath(); for(let j=0;j<=n;j++){const p=proj(ip(j/n*q));if(!p)continue; j?mc.lineTo(p[0],p[1]):mc.moveTo(p[0],p[1]);}
+    mc.setLineDash([10,8]); mc.strokeStyle=GOLD; mc.lineWidth=4; mc.shadowColor=GOLD; mc.shadowBlur=12; mc.stroke(); mc.setLineDash([]); mc.shadowBlur=0;
+    if(q<1){const h=proj(ip(q));mc.fillStyle=GOLD2;mc.beginPath();mc.arc(h[0],h[1],9,0,6.283);mc.fill();mc.strokeStyle=`rgba(${AC2},.5)`;mc.lineWidth=3;mc.beginPath();mc.arc(h[0],h[1],16+6*Math.sin(T*8),0,6.283);mc.stroke();}
+  }
+  for(const S of SPOKES){const q=pr(T,S.t-.2,1.4); if(q<=0) continue; const ip=d3.geoInterpolate(S.a,S.b),n=48;
+    mc.beginPath(); for(let j=0;j<=n;j++){const p=proj(ip(j/n*q));if(!p)continue; j?mc.lineTo(p[0],p[1]):mc.moveTo(p[0],p[1]);}
+    mc.strokeStyle=GOLD; mc.lineWidth=5; mc.shadowColor=GOLD; mc.shadowBlur=14; mc.stroke(); mc.shadowBlur=0;
+    const h=proj(ip(q)); if(h){mc.fillStyle=GOLD2;mc.beginPath();mc.arc(h[0],h[1],10,0,6.283);mc.fill();}}
+  mc.globalAlpha=1;
+  return proj;
+}
+
+// ---------- الخلفية ----------
+const RR=rng(7),DUST=[];for(let i=0;i<110;i++)DUST.push({x:RR()*W,y:RR()*H,r:.6+RR()*2.4,v:4+RR()*12,p:RR()*6.28});
+const BLOBS=[];for(let i=0;i<6;i++)BLOBS.push({x:RR(),y:RR(),r:.35+RR()*.4,sx:.03+RR()*.05,sy:.02+RR()*.05,p:RR()*6.28,c:i%2});
+const PATS=['hex','grid','rings','stars','diag','dots'];
+function bg(T,si){
+  bgc.fillStyle=`rgb(${BG1.join(',')})`;bgc.fillRect(0,0,W,H);
+  for(const b of BLOBS){const x=(b.x+.18*Math.sin(T*b.sx*6+b.p))*W,y=(b.y+.18*Math.cos(T*b.sy*6+b.p))*H,r=b.r*Math.max(W,H);
+    const g=bgc.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${b.c?AC2:AC},${b.c?.10:.16})`);g.addColorStop(1,'rgba(0,0,0,0)');bgc.fillStyle=g;bgc.fillRect(0,0,W,H);}
+  const v=bgc.createRadialGradient(W/2,H/2,Math.min(W,H)*.3,W/2,H/2,Math.max(W,H)*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.65)');bgc.fillStyle=v;bgc.fillRect(0,0,W,H);
+  const P=PATS[(si+OFF)%PATS.length];bgc.save();bgc.strokeStyle=`rgba(${AC},.08)`;bgc.fillStyle=`rgba(${AC},.10)`;bgc.lineWidth=1.5;
+  if(P==='hex'){const r=64,h=r*Math.sqrt(3),o=(T*10)%h;for(let row=-2;row*h*.5<H+h;row++)for(let col=-1;col*r*3<W+r*3;col++){const cx=col*r*3+(row%2?r*1.5:0),cy=row*h*.5+o;bgc.beginPath();for(let k=0;k<6;k++){const a=k*Math.PI/3;bgc.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}bgc.closePath();bgc.stroke();}}
+  else if(P==='grid'){const s=80,o=(T*14)%s;for(let x=o-s;x<W+s;x+=s){bgc.beginPath();bgc.moveTo(x,0);bgc.lineTo(x,H);bgc.stroke();}for(let y=o-s;y<H+s;y+=s){bgc.beginPath();bgc.moveTo(0,y);bgc.lineTo(W,y);bgc.stroke();}}
+  else if(P==='rings'){bgc.translate(W/2,H/2);for(let i=0;i<16;i++){bgc.save();bgc.rotate(T*(i%2?.08:-.08));bgc.setLineDash([40+i*5,24]);bgc.beginPath();bgc.arc(0,0,100+i*110,0,6.283);bgc.stroke();bgc.restore();}}
+  else if(P==='stars'){const s=170,o=(T*12)%s;for(let y=-s;y<H+s;y+=s)for(let x=-s;x<W+s;x+=s){const cx=x+(Math.round(y/s)%2?s/2:0),cy=y+o;bgc.beginPath();for(let k=0;k<16;k++){const a=k*Math.PI/8+T*.08,r=k%2?24:56;bgc.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}bgc.closePath();bgc.stroke();}}
+  else if(P==='diag'){const s=70,o=(T*30)%s;for(let x=-H+o;x<W+H;x+=s){bgc.beginPath();bgc.moveTo(x,0);bgc.lineTo(x-H*.6,H);bgc.stroke();}}
+  else {const s=60,o=(T*8)%s;for(let x=0;x<W+s;x+=s)for(let y=o-s;y<H+s;y+=s){bgc.beginPath();bgc.arc(x,y,2.2+1.2*Math.sin(T*2+x*.01+y*.013),0,6.283);bgc.fill();}}
+  bgc.restore();
+}
+function dust(T){let s='';for(const d of DUST){const y=((d.y-T*d.v)%H+H)%H,x=d.x+Math.sin(T*.4+d.p)*18;s+=`<circle cx="${x}" cy="${y}" r="${d.r}" fill="${GOLD2}" opacity="${.15+.3*Math.sin(T*1.2+d.p*3)}"/>`;}return `<svg class="a" style="left:0;top:0" width="${W}" height="${H}">${s}</svg>`}
+const fmt=(str,p)=>{const v=parseFloat(String(str).replace(/,/g,''));const n=Math.round(v*p);return String(str).includes(',')||v>=10000?n.toLocaleString('en-US'):String(n)};
+const IMG=f=>D.img+'/'+f;
+// ---------- الصور ----------
+function kb(sc,T,i){const p=cl((T-sc.start)/sc.dur),dir=i%4;const s=1.08+.14*p;const dx=[1,-1,0,0][dir]*40*(p-.5),dy=[0,0,1,-1][dir]*30*(p-.5);return `transform:scale(${s}) translate(${dx}px,${dy}px)`}
+function photoPanel(sc,T,t,i){ // لوحة صورة جانبية مع كشف مائل
+  const k=eio(pr(t,0,.9)),img=sc.img;
+  if(!V){const w=880,edge=150;const xr=w*k;
+    return `<div class="ph" style="left:0;top:0;width:${W}px;height:${H}px;clip-path:polygon(0 0,${xr}px 0,${xr-edge}px ${H}px,0 ${H}px)"><img src="${IMG(img)}" style="${kb(sc,T,i)}"><div class="a" style="inset:0;background:linear-gradient(90deg,rgba(0,0,0,.05),rgba(0,0,0,.15) 60%,rgba(${BG1.join(',')},.85)),linear-gradient(0deg,rgba(${AC},.22),rgba(0,0,0,0) 45%)"></div></div>
+    <svg class="a" style="left:0;top:0" width="${W}" height="${H}"><line x1="${xr}" y1="0" x2="${xr-edge}" y2="${H}" stroke="${GOLD}" stroke-width="6" style="filter:drop-shadow(0 0 14px ${GOLD})"/><line x1="${xr+26}" y1="0" x2="${xr-edge+26}" y2="${H}" stroke="${GOLD2}" stroke-width="2" opacity=".6"/></svg>`;}
+  const h=820,edge=120;const yb=h*k;
+  return `<div class="ph" style="left:0;top:0;width:${W}px;height:${H}px;clip-path:polygon(0 0,${W}px 0,${W}px ${yb-edge}px,0 ${yb}px)"><img src="${IMG(img)}" style="${kb(sc,T,i)};height:${h+40}px"><div class="a" style="left:0;top:0;width:${W}px;height:${h}px;background:linear-gradient(0deg,rgba(${BG1.join(',')},.9),rgba(0,0,0,0) 40%),linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 25%)"></div></div>
+   <svg class="a" style="left:0;top:0" width="${W}" height="${H}"><line x1="${W}" y1="${yb-edge}" x2="0" y2="${yb}" stroke="${GOLD}" stroke-width="6" style="filter:drop-shadow(0 0 14px ${GOLD})"/></svg>`;
+}
+function photoCard(sc,T,i){ // صورة عائمة فوق الخريطة عند نطق الكلمة
+  const ct=cueT(sc,sc.imgcue,sc.voice+.8),k=eb(pr(T,ct-.1,.7));if(k<=0)return'';
+  const [x,y,w,h]=V?[90,930,900,470]:[1240,190,600,440];const rot=(i%2?3:-3)*(1-k)+(i%2?1.5:-1.5);
+  return `<div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:translateY(${(1-k)*80}px) rotate(${rot}deg) scale(${.85+.15*k});opacity:${cl(k*1.4)}">
+   <div class="ph" style="inset:0;border-radius:18px;border:4px solid ${GOLD};box-shadow:0 0 40px rgba(${AC},.5),0 30px 60px rgba(0,0,0,.6)"><img src="${IMG(sc.img)}" style="${kb(sc,T,i)}"></div>
+   ${sc.cap?`<div class="a" style="right:-10px;bottom:-26px;padding:6px 22px;border-radius:12px;background:${GOLD};color:${INK};font-family:A;font-size:${V?40:34}px">${sc.cap}</div>`:''}</div>`;
+}
+
+// ---------- المجسّمات والشخصيات (مربوطة بالكلمات) ----------
+function ills(sc){return (sc.ill||[]).map(x=>typeof x==='string'||x.char||x.k?{d:x.d||x,cue:x.cue}:x)}
+function stage(sc,T,t,bx,i,card){const L=ills(sc);if(!L.length)return'';
+  const ts=L.map((x,j)=>j===0&&!x.cue?sc.start+.15:cueT(sc,x.cue,sc.start+.15));
+  let cur=0;ts.forEach((c,j)=>{if(T>=c-.25)cur=j});
+  let h='';
+  for(const j of [cur-1,cur]){if(j<0)continue;const k=cl((T-ts[j]+.25)/1.6);let op=1,sc2=1;
+    if(j<cur){const q=cl((T-ts[cur]+.25)/.45);op=1-q;sc2=1-.15*q;if(op<=0)continue;}
+    const d=L[j].d;const isChar=(typeof d==='string'&&d.startsWith('char:'))||d.char;
+    h+=`<div class="a" style="left:0;top:0;width:100%;height:100%;opacity:${op};transform:scale(${sc2})">${DRAW(d,k,T,GOLD,GOLD2)}</div>`;}
+  const pl=eo(pr(t,0,.6));
+  const deco=`<svg class="a" style="left:0;top:0;overflow:visible" width="${bx.w}" height="${bx.h}"><defs><radialGradient id="pg${i}"><stop offset="0" stop-color="rgb(${AC})" stop-opacity=".45"/><stop offset="1" stop-color="rgb(${AC})" stop-opacity="0"/></radialGradient></defs>
+    <circle cx="${bx.w/2}" cy="${bx.h*.48}" r="${Math.min(bx.w,bx.h)*.55*pl}" fill="url(#pg${i})"/>
+    <g transform="translate(${bx.w/2},${bx.h*.48}) rotate(${T*12})"><circle r="${Math.min(bx.w,bx.h)*.46*pl}" fill="none" stroke="rgb(${AC})" stroke-width="3" stroke-dasharray="14 18" opacity=".55"/></g>
+    <g transform="translate(${bx.w/2},${bx.h*.48}) rotate(${-T*8})"><circle r="${Math.min(bx.w,bx.h)*.5*pl}" fill="none" stroke="rgb(${AC2})" stroke-width="2" stroke-dasharray="4 26" opacity=".6"/></g></svg>`;
+  if(card){const k=eb(pr(T,ts[0]-.1,.7));return `<div class="a" style="left:${bx.x}px;top:${bx.y}px;width:${bx.w}px;height:${bx.h}px;opacity:${cl(k*1.4)};transform:translateY(${(1-k)*80}px) scale(${.85+.15*k})">
+     <div class="a" style="inset:0;border-radius:36px;background:radial-gradient(circle at 50% 45%,rgba(${AC},.28),rgba(${BG1.join(',')},.92) 70%);border:3px solid ${GOLD};box-shadow:0 0 40px rgba(${AC},.45),0 30px 60px rgba(0,0,0,.6)"></div>
+     <div class="a" style="left:4%;top:4%;width:92%;height:92%">${h}</div></div>`;}
+  return `<div class="a" style="left:${bx.x}px;top:${bx.y}px;width:${bx.w}px;height:${bx.h}px">${deco}<div class="a" style="left:3%;top:3%;width:94%;height:94%">${h}</div></div>`;
+}
+// ---------- مشاهد المحتوى (داخل صندوق B) ----------
+const R={};
+function line(B,top,k){return `<svg class="a" style="left:${B.cx-180}px;top:${top}px" width="360" height="20"><line x1="${180-180*k}" y1="10" x2="${180+180*k}" y2="10" stroke="${GOLD}" stroke-width="4" stroke-linecap="round"/><circle cx="180" cy="10" r="${9*k}" fill="${GOLD2}"/></svg>`}
+R.title=(sc,T,t,B)=>{const k=eo(pr(t,.15,1)),kn=eb(pr(T,cueT(sc,sc.numcue),.6)),cnt=eo(pr(T,cueT(sc,sc.numcue),1.6));
+  const fs=B.split?(V?110:130):(V?(sc.text.length>10?120:150):170);
+  // حروف العنوان تتساقط كلمة كلمة
+  const ws=sc.text.split(' ');const tw=ws.map((w,j)=>{const q=eb(pr(t,.15+j*.18,.6));return `<span style="display:inline-block;opacity:${cl(q*1.5)};transform:translateY(${(1-q)*-60}px) scale(${.8+.2*q});margin:0 .12em">${w}</span>`}).join('');
+  let h=line(B,B.top,k)+`<div class="a q" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top+40}px;text-align:center;font-size:${fs}px;line-height:1.3">${tw}</div>
+  <div class="a" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top+60+fs*1.35}px;text-align:center;font-family:A;font-size:${V?56:54}px;color:#fff;opacity:${eo(pr(t,.9,.8))};transform:translateY(${(1-eo(pr(t,.9,.8)))*20}px)">${sc.sub}</div>`;
+  if(sc.num) h+=`<div class="a" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top+150+fs*1.35}px;text-align:center;opacity:${cl(kn*1.5)};transform:scale(${.7+.3*kn})"><span style="display:inline-block;padding:4px 40px;border-radius:60px;background:rgba(${AC},.16);border:2px solid rgba(${AC},.6)"><span style="font-family:A;font-size:${V?110:100}px;color:${GOLD};direction:ltr;display:inline-block;text-shadow:0 0 30px rgba(${AC},.6)">${fmt(sc.num,cnt)}</span><span style="font-family:A;font-size:54px;color:#fff;margin-right:18px">${sc.unit}</span></span></div>`;
+  return h};
+R.bullets=(sc,T,t,B)=>{const k=eo(pr(t,.1,.7));const hs=B.split?(V?84:96):(V?108:110);
+  let h=`<div class="a q" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top}px;text-align:center;font-size:${hs}px;opacity:${k};transform:translateY(${(1-k)*-30}px)">${sc.head}</div>`+line(B,B.top+hs*1.45,k);
+  const cw=Math.min(B.w-70,V?960:1000),ch=B.split&&V?100:(V?124:110),gap=B.split&&V?116:(V?160:136),top0=B.top+hs*1.45+50;
+  (sc.items||[]).forEach((it,i)=>{const kk=eb(pr(T,cueT(sc,it.cue)-.15,.6));if(kk<=0)return;const n=String(i+1);
+    h+=`<div class="card" style="left:${B.cx-cw/2}px;width:${cw}px;top:${top0+i*gap}px;height:${ch}px;display:flex;align-items:center;gap:22px;padding:0 28px;box-sizing:border-box;opacity:${cl(kk*1.5)};transform:translateX(${(1-kk)*-120}px)">
+     <div style="flex:none;width:${ch-34}px;height:${ch-34}px;border-radius:50%;background:${GOLD};color:${INK};display:flex;align-items:center;justify-content:center;font-family:A;font-size:${ch*.42}px;box-shadow:0 0 22px rgba(${AC},.6)">${n}</div>
+     <span style="font-family:A;font-size:${(V?(B.split?42:48):(B.split?44:52))*(it.t.length>26?.9:1)}px;color:#fff;line-height:1.25">${it.t}</span></div>`});return h};
+R.date=(sc,T,t,B)=>{const k=eb(pr(t,.15,.8)),c=eo(pr(t,.15,1.4));const ys=B.split?(V?170:200):(V?250:240);
+  let h=`<div class="a" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top-20}px;text-align:center;transform:scale(${.6+.4*k});opacity:${cl(k*1.4)}"><div style="font-family:A;font-size:${ys}px;line-height:1;color:${GOLD};text-shadow:0 0 50px rgba(${AC},.6);letter-spacing:4px">${Math.round(parseInt(sc.year)*(.85+.15*c))}</div><div class="q" style="font-size:${V?70:66}px;margin-top:6px;color:#fff">${sc.label}</div></div>`;
+  const cw=Math.min(B.w-80,V?940:820),ch=V?(B.split?96:116):96,top0=B.top+ys+(V?110:120);
+  (sc.items||[]).forEach((it,i)=>{const kk=eb(pr(T,cueT(sc,it.cue)-.1,.6));if(kk<=0)return;h+=`<div class="card" style="left:${B.cx-cw/2}px;width:${cw}px;top:${top0+i*(ch+22)}px;height:${ch}px;display:flex;align-items:center;justify-content:center;opacity:${cl(kk*1.5)};transform:scale(${.8+.2*kk})"><span style="font-family:A;font-size:${V?(B.split?42:48):46}px;color:#fff;text-align:center;padding:0 20px">${it.t}</span></div>`});return h};
+R.book=(sc,T,t,B)=>{const k=eb(pr(t,.1,.9)),open=eo(pr(t,.6,1.2));const fl=Math.sin(T*1.5)*8,s=B.split?.75:1;
+  return `<svg class="a" style="left:${B.cx-300}px;top:${B.top-40+fl}px;transform:scale(${k*s});transform-origin:center top" width="600" height="400" viewBox="-300 -200 600 400">
+   <path d="M0 -150 Q-150 -180 -280 -150 L-280 150 Q-150 120 0 150Z" fill="rgba(${AC},.18)" stroke="${GOLD}" stroke-width="5"/>
+   <path d="M0 -150 Q${150*open} -180 ${280*open} -150 L${280*open} 150 Q${150*open} 120 0 150Z" fill="rgba(${AC},.18)" stroke="${GOLD}" stroke-width="5"/>
+   ${[0,1,2,3,4].map(i=>`<line x1="-240" y1="${-100+i*45}" x2="-40" y2="${-105+i*45}" stroke="rgba(${AC2},.6)" stroke-width="4"/>`).join('')}
+   ${open>.6?[0,1,2,3,4].map(i=>`<line x1="40" y1="${-105+i*45}" x2="240" y2="${-100+i*45}" stroke="rgba(${AC2},.6)" stroke-width="4" opacity="${(open-.6)/.4}"/>`).join(''):''}
+   <line x1="0" y1="-150" x2="0" y2="150" stroke="${GOLD}" stroke-width="4"/></svg>
+   <div class="a q" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top+400*s-20}px;text-align:center;font-size:${V?(sc.head.length>14?80:100):(B.split?90:110)}px;line-height:1.3;opacity:${eo(pr(T,cueT(sc,sc.headcue)-.2,.8))}">${sc.head}</div>
+   <div class="a" style="left:${B.cx-B.w/2}px;width:${B.w}px;top:${B.top+400*s+(V?150:140)}px;text-align:center;font-family:A;font-size:${V?48:50}px;color:#fff;opacity:${eo(pr(T,cueT(sc,sc.subcue)-.2,.8))}">${sc.sub} — ${sc.year} ${sc.era||'م'}</div>`};
+R.stats=(sc,T,t,B)=>{let h='';const n=sc.items.length;sc.items.forEach((it,i)=>{const ct=cueT(sc,it.cue),k=eb(pr(T,ct-.15,.6)),c=eo(pr(T,ct-.15,1.4));if(k<=0)return;
+  const w=V?760:(B.split?420:460),hh=V?(B.split?250:380):420;const x=V?B.cx-w/2:B.cx-w/2+(((n-1)/2-i)*(w+40)), y=V?B.top+i*(hh+30):B.top+60;
+  h+=`<div class="card" style="left:${x}px;top:${y}px;width:${w}px;height:${hh}px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:${cl(k*1.5)};transform:translateY(${(1-k)*60}px) scale(${.85+.15*k})">
+   <div style="font-family:A;font-size:${V&&B.split?120:150}px;line-height:1.1;color:${GOLD};direction:ltr;text-shadow:0 0 34px rgba(${AC},.6)">${fmt(it.num,c)}</div><div style="font-family:A;font-size:44px;color:#fff;text-align:center;padding:0 20px">${it.lab}</div></div>`});return h};
+R.outro=(sc,T,t,B)=>{const k=eb(pr(t,0,.9));const cx=W/2;
+  return `<svg class="a" style="left:${cx-330}px;top:${V?370:80}px" width="660" height="660"><g transform="translate(330,330) rotate(${T*20})">${[0,1,2,3,4,5,6,7].map(j=>`<circle r="${290}" cx="0" cy="0" fill="none" stroke="rgb(${palOf(j)[0].join(',')})" stroke-width="5" stroke-dasharray="${180*k} 2000" transform="rotate(${j*45})"/>`).join('')}</g></svg>
+  <img class="a" src="${D.logo}" style="left:${cx-230}px;top:${V?470:180}px;width:460px;height:460px;border-radius:50%;transform:scale(${k});box-shadow:0 0 90px rgba(${AC},.5)">
+  <div class="a" style="left:0;right:0;top:${V?1070:670}px;text-align:center;font-family:Q;font-size:${V?76:68}px;color:${GOLD2};opacity:${eo(pr(t,.8,.6))}">فلكلِّ زمانٍ حكاية</div>
+  <div class="a" style="left:${cx-210}px;top:${V?1200:790}px;width:420px;height:100px;border-radius:50px;background:linear-gradient(135deg,#ff3030,#c00);display:flex;align-items:center;justify-content:center;font-family:A;font-size:54px;color:#fff;transform:scale(${eb(pr(t,1.2,.5))*(1+.04*Math.sin(T*6))});box-shadow:0 10px 40px rgba(255,0,0,.4)">${V?'تابِع الصفحة':'اشترك'}</div>`};
+function titlePhoto(sc,T,t,i){ // صورة شخصية مؤطّرة + خلفية ضبابية
+  const k=eb(pr(t,.05,.9));const [x,y,w,h]=V?[220,170,640,760]:[150,150,560,780];
+  return `<div class="ph" style="inset:0;opacity:.45"><img src="${IMG(sc.img)}" style="${kb(sc,T,i)};filter:blur(18px) saturate(1.2)"></div><div class="a" style="inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.2),rgba(${BG1.join(',')},.9))"></div>
+  <div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:scale(${.8+.2*k}) rotate(${(1-k)*-6}deg);opacity:${cl(k*1.4)}">
+   <div class="a" style="inset:-18px;border-radius:30px;background:conic-gradient(from ${T*60}deg,${PALS.map(p=>p[0]).join(',')},${PALS[0][0]});filter:blur(2px)"></div>
+   <div class="ph" style="inset:0;border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.6)"><img src="${IMG(sc.img)}" style="${kb(sc,T,i)}"></div></div>`;
+}
+// ---------- الترجمة ----------
+function subs(sc,T,B){
+  if(sc.type==='outro')return'';
+  const cues=new Set();(sc.pts||[]).forEach(p=>cues.add(norm(p.cue)));(sc.items||[]).forEach(p=>p.cue&&cues.add(norm(p.cue)));if(sc.numcue)cues.add(norm(sc.numcue));
+  const ch=[];let cur=[];for(const w of sc.words){cur.push(w);if(cur.length>=(V?4:6)||/[،,.:]$/.test(w.w)){ch.push(cur);cur=[]}}if(cur.length)ch.push(cur);
+  let pick=null;for(const c of ch){if(T>=sc.voice+c[0].t-.08)pick=c}
+  if(!pick)return'';const last=pick[pick.length-1];if(T>sc.voice+last.t+last.d+1.2)return'';
+  const html=pick.map(w=>{const tw=sc.voice+w.t,k=eb(pr(T,tw-.05,.3));const now=T>=tw-.05&&T<tw+w.d+.1;const key=[...cues].some(c=>c&&norm(w.w).includes(c));
+    const bgw=now?`background:${GOLD};color:${INK};border-radius:12px;`:`color:${key?GOLD2:'#fff'};`;
+    return `<span style="display:inline-block;margin:0 4px;padding:0 10px;opacity:${cl(k*1.4)};transform:translateY(${(1-k)*24}px) scale(${.85+.15*k});${bgw}${now?'':'text-shadow:0 3px 10px #000'}">${w.w}</span>`}).join('');
+  const top=V?1470:950;
+  return `<div class="a" style="left:${V?40:140}px;right:${V?40:140}px;top:${top}px;text-align:center"><span style="font-family:A;font-size:${V?58:48}px;line-height:1.6;background:rgba(0,0,0,.55);padding:6px 18px;border-radius:18px;border:1px solid rgba(${AC},.35)">${html}</span></div>`;
+}
+// ---------- الانتقال بين المشاهد ----------
+function sweep(sc,t,i){if(i===0||t>.75)return'';const p=eio(pr(t,0,.75));const x=(-0.4+1.8*p)*W;
+  return `<div class="a" style="left:${x-W*.35}px;top:${-H*.2}px;width:${W*.35}px;height:${H*1.4}px;transform:skewX(-18deg);background:linear-gradient(90deg,rgba(${AC},0),rgba(${AC},.55),rgba(${AC2},.9),rgba(${AC},.55),rgba(${AC},0));filter:blur(8px)"></div>
+  <div class="a" style="inset:0;background:rgba(${AC2},${.25*(1-pr(t,0,.35))})"></div>`}
+// ---------- الإطار ----------
+function frame(T){
+  let i=0;SC.forEach((s,k)=>{if(T>=s.start)i=k});const sc=SC[i],t=T-sc.start;
+  setPal(T); bg(T,i);
+  const isMap=sc.type==='map';
+  const prevMap=i>0&&SC[i-1].type==='map';
+  let mv=isMap?1:0.12;
+  if(isMap&&!prevMap) mv=0.12+0.88*eo(pr(t,0,.8)); if(!isMap&&prevMap) mv=1-0.88*eo(pr(t,0,.6));
+  if(sc.type==='outro') mv=0;
+  const proj=drawMap(T,mv);
+  let h=dust(T);
+  const hasIll=(sc.ill||[]).length>0; const split=!isMap&&hasIll&&sc.type!=='outro';
+  const B=split?(V?{cx:540,w:1040,top:sc.type==='title'?960:900,split:1}:{cx:1420,w:880,top:sc.type==='title'?250:190,split:1}):(V?{cx:540,w:1040,top:420}:{cx:960,w:1820,top:190});
+  if(isMap&&proj){
+    LABELS.forEach(L=>{const k=eb(pr(T,L.t-.05,.5));if(k<=0)return;const p=proj(L.ll);if(!p||p[0]<-100||p[0]>W+100||p[1]<-50||p[1]>H+50)return;
+      const cur=L.scene===i, pulse=cur?Math.max(0,1-(T-L.t)/1.4):0, sz=(L.big?(V?64:56):(V?48:40))*(cur?1:.75);
+      h+=`<svg class="a" style="left:0;top:0;overflow:visible" width="${W}" height="${H}"><circle cx="${p[0]}" cy="${p[1]}" r="${(L.big?14:9)*k}" fill="${cur?GOLD2:GOLD}" stroke="${INK}" stroke-width="3"/>
+        <circle cx="${p[0]}" cy="${p[1]}" r="${20+70*(1-pulse)}" fill="none" stroke="${GOLD2}" stroke-width="4" opacity="${pulse}"/></svg>
+        <div class="a" style="left:${p[0]-300}px;width:600px;top:${p[1]-sz*1.9}px;text-align:center;opacity:${cur?1:.75}"><span style="display:inline-block;font-family:${L.big?'Q':'A'};font-size:${sz*k}px;color:${cur?'#fff':GOLD2};padding:0 18px;border-radius:14px;background:${cur?`rgba(${AC},.35)`:'transparent'};text-shadow:0 0 12px #000,0 3px 8px #000">${L.n}</span></div>`;});
+    if(sc.year){const k=eb(pr(t,.3,.7));h+=`<div class="a" style="left:${V?60:70}px;top:${V?220:80}px;font-family:A;font-size:${V?110:100}px;color:${GOLD};opacity:${k};transform:scale(${.7+.3*k});transform-origin:left top;text-shadow:0 0 30px rgba(${AC},.6),0 4px 12px #000">${sc.year} ${sc.era||'م'}</div>`;}
+    if(sc.chapter){const k=eo(pr(t,.1,.7));h+=`<div class="a" style="left:0;right:0;top:${V?150:40}px;text-align:center;opacity:${k};transform:translateY(${(1-k)*-30}px)"><span class="q" style="font-size:52px;background:rgba(0,0,0,.55);padding:2px 34px;border-radius:30px;border:2px solid ${GOLD}">${sc.chapter}</span></div>`;}
+    if(hasIll) h+=stage(sc,T,t,V?{x:150,y:890,w:780,h:540}:{x:1290,y:160,w:580,h:580},i,1);
+  } else if(R[sc.type]){
+    const v=Math.min(eo(pr(t,0,.4)),cl((sc.dur-t)/.3));
+    let inner='';
+    if(split) inner+=stage(sc,T,t,V?{x:40,y:110,w:1000,h:780}:{x:30,y:110,w:980,h:860},i,0);
+    inner+=R[sc.type](sc,T,t,B);
+    h+=`<div class="a" style="inset:0;opacity:${v}">${inner}</div>`;
+  }
+  h+=sweep(sc,t,i);
+  h+=subs(sc,T,B);
+  h+=`<div class="a" style="right:36px;top:${V?60:30}px;display:flex;align-items:center;gap:12px;padding:6px 22px 6px 8px;border-radius:36px;background:rgba(0,0,0,.55);border:2px solid ${GOLD}"><img src="${D.logo}" style="width:50px;height:50px;border-radius:50%"><span style="font-family:Q;font-size:34px;color:#fff">حكايا الزمان</span></div>`;
+  h+=`<div class="a" style="left:0;bottom:0;height:6px;width:${W}px;background:rgba(255,255,255,.08)"><div style="height:100%;width:${cl(T/D.total)*100}%;margin-left:auto;background:${GOLD};box-shadow:0 0 10px ${GOLD}"></div></div>`;
+  const f=Math.min(cl(T/.5),cl((D.total-T)/.8));h+=`<div class="a" style="inset:0;background:#000;opacity:${1-f}"></div>`;
+  st.innerHTML=h;
+  return Promise.all([...document.images].filter(x=>!x.complete).map(x=>x.decode().catch(()=>0)));
+}
+window.frame=frame;
+window.ready=Promise.all([document.fonts.ready,...[D.logo].map(s=>new Promise(r=>{const x=new Image();x.onload=x.onerror=r;x.src=s}))]);
+</script></body></html>
