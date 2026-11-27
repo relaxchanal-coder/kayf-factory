@@ -46,13 +46,13 @@ def build(d):
     st=json.load(open(f"{d}/story.json")); S=st["scenes"]; os.makedirs(f"{d}/au",exist_ok=True)
     if not os.path.exists(f"{d}/words.json"):
         json.dump(asyncio.run(tts(d,S)),open(f"{d}/words.json","w"),ensure_ascii=False)
-    WS=json.load(open(f"{d}/words.json")); t=0.6
+    WS=json.load(open(f"{d}/words.json")); t=0.05
     for i,s in enumerate(S):
-        L=dur(f"{d}/au/n{i}.mp3"); s["start"]=round(t,3); s["voice"]=round(t+0.25,3); s["words"]=WS[i]
+        L=dur(f"{d}/au/n{i}.mp3"); s["start"]=round(t,3); s["voice"]=round(t+(0.1 if i==0 else 0.25),3); s["words"]=WS[i]
         s["dur"]=round(L+(0.55 if s["type"]!="outro" else 1.6),3); t+=s["dur"]
     st["total"]=round(t+0.3,3); st["img"]="file:///nonexistent"; st["logo"]="file://"+HZ+"/logo.png"
     json.dump(st,open(f"{d}/timeline.json","w"),ensure_ascii=False)
-    s=open(HZ+"/engine/story4.html").read()
+    s=open(HZ+"/engine/story5.html").read()
     V=st["o"]=="v"; s=s.replace("__W__","1080" if V else "1920").replace("__H__","1920" if V else "1080")
     key=os.path.basename(d.rstrip("/"))[:2]; th=TH.get(key) or dict(TH[["r1","r3","r6","r2","r5","r4","L-"][sum(map(ord,key))%7]],poff=sum(map(ord,key))%8)
     fp=lambda f,w: F+f"/{f}/files/{f}-arabic-{w}-normal.woff2"

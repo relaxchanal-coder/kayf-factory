@@ -196,8 +196,8 @@ function subs(sc,T,B){
   const cues=new Set();(sc.pts||[]).forEach(p=>cues.add(norm(p.cue)));(sc.items||[]).forEach(p=>p.cue&&cues.add(norm(p.cue)));if(sc.numcue)cues.add(norm(sc.numcue));
   const ch=[];let cur=[];for(const w of sc.words){cur.push(w);if(cur.length>=(V?4:6)||/[،,.:]$/.test(w.w)){ch.push(cur);cur=[]}}if(cur.length)ch.push(cur);
   let pick=null;for(const c of ch){if(T>=sc.voice+c[0].t-.08)pick=c}
-  if(!pick)return'';const last=pick[pick.length-1];if(T>sc.voice+last.t+last.d+1.2)return'';
-  const html=pick.map(w=>{const tw=sc.voice+w.t,k=eb(pr(T,tw-.05,.3));const now=T>=tw-.05&&T<tw+w.d+.1;const key=[...cues].some(c=>c&&norm(w.w).includes(c));
+  if(!pick||T<sc.voice+pick[0].t-.05)return'';const last=pick[pick.length-1];if(T>sc.voice+last.t+last.d+1.2)return'';
+  const html=pick.filter(w=>T>=sc.voice+w.t-.05).map(w=>{const tw=sc.voice+w.t,k=eb(pr(T,tw-.05,.3));const now=T>=tw-.05&&T<tw+w.d+.1;const key=[...cues].some(c=>c&&norm(w.w).includes(c));
     const bgw=now?`background:${GOLD};color:${INK};border-radius:12px;`:`color:${key?GOLD2:'#fff'};`;
     return `<span style="display:inline-block;margin:0 4px;padding:0 10px;opacity:${cl(k*1.4)};transform:translateY(${(1-k)*24}px) scale(${.85+.15*k});${bgw}${now?'':'text-shadow:0 3px 10px #000'}">${w.w}</span>`}).join('');
   const top=V?1470:950;
