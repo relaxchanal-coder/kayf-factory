@@ -1,0 +1,81 @@
+{
+ "id": "027-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "Why Heavy Iron Ships Don't Sink 🚢",
+ "description": "Massive ships made of solid iron weighing thousands of tons, but why don't they sink in water? Discover the scientific secret in one minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "ships",
+  "physics",
+  "science",
+  "buoyancy",
+  "facts"
+ ],
+ "thumb": {
+  "text": "Why Don't They Sink?|Iron Ships",
+  "emoji": "🚢"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "⚓",
+   "text": "Iron ships weigh thousands of tons!",
+   "say": "How does a massive iron ship weighing thousands of tons float on water, while a tiny piece of iron sinks?",
+   "image": "huge cargo ship ocean"
+  },
+  {
+   "type": "fact",
+   "emoji": "🧲",
+   "text": "Iron is heavier than water",
+   "say": "Iron material is much heavier than water, which means the material alone should sink completely."
+  },
+  {
+   "type": "icon",
+   "emoji": "📦",
+   "text": "Hollow shape of ships",
+   "say": "The secret lies in the hollow, air-filled design of the ship, which changes its overall density.",
+   "image": "empty shipping container port"
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🧱",
+    "label": "Solid iron piece",
+    "sub": "Sinks instantly"
+   },
+   "left": {
+    "emoji": "🚢",
+    "label": "Hollow ship",
+    "sub": "Floats steadily"
+   },
+   "say": "When we make the iron hollow, the average density becomes less than water, so the water pushes the ship upward."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🌊",
+     "label": "Water displacement"
+    },
+    {
+     "emoji": "⬆️",
+     "label": "Upward buoyant force"
+    },
+    {
+     "emoji": "⚖️",
+     "label": "Balance and floating"
+    }
+   ],
+   "say": "The ship displaces a massive volume of water, creating an upward buoyant force that equals the entire weight of the ship."
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How do submarines dive?",
+   "say": "Subscribe to How It Works! Next episode we discover: How do submarines dive and surface?"
+  }
+ ],
+ "topic": "Why iron ships float",
+ "lang": "en"
+}

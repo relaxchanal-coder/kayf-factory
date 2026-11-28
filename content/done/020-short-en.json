@@ -1,0 +1,90 @@
+{
+ "id": "020-short-en",
+ "format": "short",
+ "theme": "purple",
+ "title": "How Bluetooth Connects Devices Wirelessly! 📶",
+ "description": "Ever wonder how your headphones connect without any cables? Discover how Bluetooth beams data right through thin air. Learn the hidden tech powering your favorite everyday gadgets.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "bluetooth",
+  "technology",
+  "wireless",
+  "science",
+  "tech explained"
+ ],
+ "thumb": {
+  "text": "HOW BLUETOOTH|ACTUALLY WORKS",
+  "emoji": "📶"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🎧",
+   "text": "Instant wireless connection!",
+   "image": "modern wireless headphones",
+   "say": "How do your headphones connect to your phone cord-free in mere seconds? The secret lies in invisible waves."
+  },
+  {
+   "type": "icon",
+   "emoji": "📻",
+   "caption": "Radio waves",
+   "image": "radio wave antenna tower",
+   "say": "Bluetooth relies on short-range radio signals, just like walkie-talkies and traditional car radios."
+  },
+  {
+   "type": "stat",
+   "emoji": "📊",
+   "number": 79,
+   "unit": "frequency channels",
+   "label": "Avoids interference",
+   "say": "Your device hops across seventy-nine different channels eleven hundred times a second to dodge any interference."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "📱",
+     "label": "Phone transmits"
+    },
+    {
+     "emoji": "🔄",
+     "label": "Frequency hops"
+    },
+    {
+     "emoji": "🎧",
+     "label": "Headphones receive"
+    }
+   ],
+   "say": "When you stream audio, data is chopped into tiny packets and sent across shifting frequencies for a crystal-clear connection."
+  },
+  {
+   "type": "fact",
+   "emoji": "👑",
+   "text": "Named after Viking king",
+   "badge": "History fact",
+   "say": "Did you know? Bluetooth was named after an ancient Scandinavian king who united warring tribes, just like this tech unites devices."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "📶",
+    "label": "Bluetooth",
+    "sub": "Short range, low power"
+   },
+   "left": {
+    "emoji": "📡",
+    "label": "Wi-Fi",
+    "sub": "Longer range, high speed"
+   },
+   "say": "Unlike Wi-Fi designed for broad networks, Bluetooth was built for short distances and extremely low battery consumption."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How Wi-Fi Works",
+   "say": "Subscribe to How It Works! Join us in the next episode to find out: how does Wi-Fi actually work?"
+  }
+ ],
+ "topic": "How Bluetooth Works",
+ "lang": "en"
+}

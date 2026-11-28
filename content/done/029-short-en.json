@@ -1,0 +1,75 @@
+{
+ "id": "029-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "How Do Rockets Reach Outer Space? 🚀",
+ "description": "How does a rocket beat Earth's gravity to reach outer space? Discover Newton's third law of motion in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "space",
+  "rockets",
+  "science",
+  "physics",
+  "outer space"
+ ],
+ "thumb": {
+  "text": "How Do Rockets|Reach Space?",
+  "emoji": "🚀"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🌌",
+   "text": "Breaking Earth's Gravity",
+   "image": "nasa rocket launchpad",
+   "say": "How does a rocket leave Earth and head into the vastness of space? The secret lies in a simple physics law."
+  },
+  {
+   "type": "icon",
+   "emoji": "💨",
+   "text": "Action and Reaction",
+   "caption": "Newton's Third Law",
+   "say": "Rockets rely on Newton's third law: every action has an equal and opposite reaction."
+  },
+  {
+   "type": "steps",
+   "title": "Launch Mechanics",
+   "items": [
+    "Burning massive fuel",
+    "Pushing hot gas backward",
+    "Rocket launching forward"
+   ],
+   "say": "The rocket burns massive amounts of fuel, blasting hot gases downward to push the rocket upward."
+  },
+  {
+   "type": "fact",
+   "emoji": "⚖️",
+   "text": "Rockets carry massive weight",
+   "image": "nasa saturn v rocket",
+   "badge": "Fact",
+   "say": "At launch, fuel makes up ninety percent of the rocket's total mass to help it escape gravity."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🌍",
+    "label": "Gravity",
+    "sub": "Pulls rocket down"
+   },
+   "left": {
+    "emoji": "🚀",
+    "label": "Thrust",
+    "sub": "Pushes up"
+   },
+   "say": "The secret is that the massive thrust from the engines completely overpowers Earth's gravity."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How Do Telescopes Work?",
+   "say": "Subscribe to How It Works, and don't miss our next episode where we discover how telescopes peer deep into the universe."
+  }
+ ],
+ "topic": "How rockets reach space",
+ "lang": "en"
+}

@@ -1,0 +1,83 @@
+{
+ "id": "022-short-en",
+ "format": "short",
+ "theme": "cyan",
+ "title": "How Do X-Rays See Inside Your Bones? 🦴",
+ "description": "How do X-rays reveal broken bones without touching your body? Discover the physics of X-ray imaging and how shadows expose your skeleton in seconds.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "x-rays",
+  "medicine",
+  "physics",
+  "science",
+  "technology"
+ ],
+ "thumb": {
+  "text": "How Do X-Rays|See Your Bones?",
+  "emoji": "🦴"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "image": "medical radiography x-ray system",
+   "emoji": "🦴",
+   "text": "Imaging bones without surgery",
+   "say": "How do we snap a clear picture of your bones without a single cut? The secret hides inside a beam of invisible energy!"
+  },
+  {
+   "type": "icon",
+   "image": "medical x-ray vacuum tube",
+   "emoji": "⚡",
+   "caption": "X-ray vacuum tube",
+   "say": "It all starts inside a vacuum tube. Fast-moving electrons slam into a heavy metal target to generate pure X-ray energy."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🥩",
+    "label": "Skin and tissue",
+    "sub": "Let X-rays pass easily"
+   },
+   "left": {
+    "emoji": "🦴",
+    "label": "Solid bones",
+    "sub": "Block the radiation"
+   },
+   "say": "As rays pass through you, they cruise right through skin and muscle. But the dense calcium in your bones blocks them completely."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "⚡",
+     "label": "Rays pass through"
+    },
+    {
+     "emoji": "🦴",
+     "label": "Bones block beam"
+    },
+    {
+     "emoji": "📸",
+     "label": "Shadow forms"
+    }
+   ],
+   "say": "The surviving rays hit a digital sensor behind you, turning dark while your bones leave behind a bright white shadow."
+  },
+  {
+   "type": "fact",
+   "image": "historical first medical x-ray",
+   "emoji": "💡",
+   "badge": "Fun Fact",
+   "text": "Named X for unknown",
+   "say": "Scientist Wilhelm Röntgen named them X because they were a total mystery when he first discovered them!"
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How MRI machines work",
+   "say": "Subscribe to How It Works to decode everyday tech, and find out next time: how does an MRI scan map your body?"
+  }
+ ],
+ "topic": "How X-ray machines work",
+ "lang": "en"
+}

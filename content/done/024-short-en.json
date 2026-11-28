@@ -1,0 +1,81 @@
+{
+ "id": "024-short-en",
+ "format": "short",
+ "theme": "cyan",
+ "title": "How Do Vaccines Trick Your Immune System? 💉",
+ "description": "How do vaccines protect us from dangerous diseases? Here is the amazing story of how they train your immune system against viruses without causing illness.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "vaccines",
+  "science",
+  "health",
+  "immunity",
+  "science facts"
+ ],
+ "thumb": {
+  "text": "How Do Vaccines|Protect You?",
+  "emoji": "💉"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🦠",
+   "text": "How does your body fight viruses?",
+   "image": "medical laboratory microscope",
+   "say": "How do vaccines protect your body from dangerous viruses, without ever getting you sick?"
+  },
+  {
+   "type": "icon",
+   "emoji": "🛡️",
+   "caption": "Your Immune Army",
+   "say": "When a vaccine enters the body, it mimics the real virus but completely lacks the power to cause harm."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "💉",
+     "label": "Vaccine Injection"
+    },
+    {
+     "emoji": "🔬",
+     "label": "Immune Recognition"
+    },
+    {
+     "emoji": "⚔️",
+     "label": "Antibody Production"
+    }
+   ],
+   "say": "Your immune system spots the antigens inside the vaccine, and instantly starts producing specialized antibodies to fight them."
+  },
+  {
+   "type": "fact",
+   "emoji": "🧠",
+   "text": "Memory cells provide long-term defense",
+   "image": "human blood cells close up",
+   "say": "It is not just temporary defense. The body keeps immune memory cells that remember this virus for many years."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "⚠️",
+    "label": "Natural Infection",
+    "sub": "Severe symptoms and high risks"
+   },
+   "left": {
+    "emoji": "✨",
+    "label": "Safe Vaccine",
+    "sub": "Training without any damage"
+   },
+   "say": "This early training gives your body strong immunity against the real disease, avoiding all risks and severe symptoms."
+  },
+  {
+   "type": "outro",
+   "text": "Subscribe to How It Works",
+   "say": "Subscribe to How It Works, and stay tuned for the next episode as we uncover more mind-blowing science secrets."
+  }
+ ],
+ "topic": "How vaccines work",
+ "lang": "en"
+}

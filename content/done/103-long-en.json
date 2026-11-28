@@ -1,0 +1,132 @@
+{
+ "id": "103-long-en",
+ "format": "long",
+ "theme": "orange",
+ "title": "How Fast Chargers Fill Your Phone in Five Minutes! ⚡",
+ "description": "Charge your phone in mere minutes instead of waiting for hours! Discover the science and tech behind modern fast chargers.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "fast charger",
+  "technology",
+  "batteries",
+  "phones",
+  "science"
+ ],
+ "thumb": {
+  "text": "Fast Charging|How It Works",
+  "emoji": "⚡"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "⏱️",
+   "text": "Charges phone in five minutes!",
+   "say": "Why does your phone charge in minutes today, while it used to take hours in the past? Let's discover the secret together."
+  },
+  {
+   "type": "icon",
+   "emoji": "🔌",
+   "text": "Traditional Charger",
+   "caption": "Five watts",
+   "say": "Old chargers pumped energy very slowly at just five watts, because batteries were extremely sensitive."
+  },
+  {
+   "type": "stat",
+   "emoji": "⚡",
+   "number": "One hundred twenty",
+   "unit": "watts",
+   "label": "Modern charger power",
+   "say": "Today, some fast chargers reach one hundred twenty watts and more, transferring huge amounts of energy in record time."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🔌",
+     "label": "High current"
+    },
+    {
+     "emoji": "🔋",
+     "label": "Entering battery"
+    },
+    {
+     "emoji": "⚠️",
+     "label": "Damage risk"
+    }
+   ],
+   "say": "But pouring massive power all at once risks overheating and instant damage. How does technology solve this?"
+  },
+  {
+   "type": "icon",
+   "emoji": "🧠",
+   "text": "Smart chip",
+   "caption": "Charger brain",
+   "say": "The secret starts with a tiny smart chip inside the phone and charger, negotiating every second to set the right power."
+  },
+  {
+   "type": "steps",
+   "title": "Fast Charging Stages",
+   "items": [
+    "Peak power flow at start",
+    "Precise thermal monitoring",
+    "Flow slows when full"
+   ],
+   "say": "The charger pumps maximum power when empty, then slows down gradually as the battery nears completion."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🔋",
+    "label": "Single battery",
+    "sub": "Needs high pressure"
+   },
+   "left": {
+    "emoji": "🔋🔋",
+    "label": "Split dual batteries",
+    "sub": "Shares load safely"
+   },
+   "say": "Some phones split the battery into two parallel halves, accepting double the power without a dangerous temperature spike."
+  },
+  {
+   "type": "icon",
+   "emoji": "💎",
+   "text": "Gallium nitride material",
+   "caption": "Silicon alternative",
+   "say": "Fast chargers use an advanced material called gallium nitride instead of traditional silicon to transfer energy more efficiently."
+  },
+  {
+   "type": "stat",
+   "emoji": "❄️",
+   "number": "Less",
+   "unit": "heat",
+   "label": "New material efficiency",
+   "say": "This material allows higher power to pass with less energy wasted as heat, letting you charge your phone safely."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "⚡",
+     "label": "High energy"
+    },
+    {
+     "emoji": "💻",
+     "label": "Digital regulation"
+    },
+    {
+     "emoji": "📱",
+     "label": "Fast safe charge"
+    }
+   ],
+   "say": "So fast charging is not just strong electricity, it is a precise engineering dance between software and advanced physics."
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How Wi-Fi works?",
+   "say": "If you liked the video, hit the like button and subscribe to the channel. Stay tuned for the next episode to see how Wi-Fi works."
+  }
+ ],
+ "topic": "How fast phone charger works",
+ "lang": "en"
+}

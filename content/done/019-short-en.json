@@ -1,0 +1,91 @@
+{
+ "id": "019-short-en",
+ "format": "short",
+ "theme": "orange",
+ "title": "How Does Face ID Work on Your Phone? 📱",
+ "description": "Unlock your phone just by looking at it, even in total darkness. Discover the invisible tech mapping your face in milliseconds.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "face id",
+  "technology",
+  "smartphones",
+  "artificial intelligence",
+  "science"
+ ],
+ "thumb": {
+  "text": "How It Maps|Your Face!",
+  "emoji": "👤"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "📱",
+   "text": "Unlocks even in total darkness",
+   "image": "smartphone infrared camera sensor",
+   "say": "Your phone unlocks just by looking at it, even in total darkness and in a fraction of a second! So how does Face ID map your features with such precision?"
+  },
+  {
+   "type": "icon",
+   "emoji": "💡",
+   "caption": "Invisible light beam",
+   "image": "infrared optical sensor chip",
+   "say": "It starts with an invisible infrared flood illuminator that lights up your face, completely hidden from your eyes but instantly spotted by the sensor."
+  },
+  {
+   "type": "stat",
+   "emoji": "🔴",
+   "number": "30,000",
+   "unit": "dots",
+   "label": "3D mesh grid",
+   "say": "A dot projector fires over thirty thousand invisible dots, mapping your facial contours in breathtaking three dimensional detail."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "📸",
+     "label": "Capture IR dots"
+    },
+    {
+     "emoji": "📐",
+     "label": "Encrypted math code"
+    },
+    {
+     "emoji": "🔓",
+     "label": "Unlock phone"
+    }
+   ],
+   "say": "An infrared camera reads the dot distances, and an AI chip turns them into an encrypted mathematical code that cannot be faked."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🖼️",
+    "label": "Flat photo",
+    "sub": "Fails to unlock"
+   },
+   "left": {
+    "emoji": "👤",
+    "label": "Real face",
+    "sub": "3D depth map"
+   },
+   "say": "That is why printed photos fail to fool the system, because the tech measures true depth instead of just flat colors."
+  },
+  {
+   "type": "fact",
+   "emoji": "🕶️",
+   "badge": "Fact",
+   "text": "Adapts to your changing features",
+   "image": "infrared dot pattern surface",
+   "say": "Did you know? Machine learning algorithms gradually adapt to your changing features, like growing a beard or wearing glasses."
+  },
+  {
+   "type": "outro",
+   "text": "Next Episode: Touch Screens",
+   "say": "Subscribe to How It Works to discover more tech secrets. Next episode: how do touch screens sense your finger?"
+  }
+ ],
+ "topic": "How Face ID Works",
+ "lang": "en"
+}

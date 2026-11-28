@@ -1,0 +1,79 @@
+{
+ "id": "017-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "How Do Batteries Make Electricity? 🔋",
+ "description": "Ever wonder how chemicals inside a battery turn into electrical energy to power your devices? Discover the amazing scientific secret in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "battery",
+  "science",
+  "physics",
+  "energy",
+  "facts"
+ ],
+ "thumb": {
+  "text": "How Batteries|Make Power",
+  "emoji": "🔋"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "⚡",
+   "text": "Chemicals to electricity",
+   "say": "How do dead chemicals turn into electrical energy capable of powering your phone?"
+  },
+  {
+   "type": "icon",
+   "emoji": "🧱",
+   "caption": "Electrodes and solution",
+   "say": "A battery consists of a positive pole and a negative pole, separated by a chemical solution called an electrolyte."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🔬",
+     "label": "Chemical reaction"
+    },
+    {
+     "emoji": "🔋",
+     "label": "Separating electrons"
+    },
+    {
+     "emoji": "⚡",
+     "label": "Current flows"
+    }
+   ],
+   "say": "An internal chemical reaction forces electrons to gather at the negative pole, trying to reach the positive pole."
+  },
+  {
+   "type": "fact",
+   "emoji": "🚫",
+   "text": "Electrons cannot cross solution",
+   "say": "Did you know? Electrons cannot cross through the internal solution, so the system forces them through the outer wire to power your device."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🔴",
+    "label": "Negative Pole",
+    "sub": "Electron source"
+   },
+   "left": {
+    "emoji": "🔵",
+    "label": "Positive Pole",
+    "sub": "Electron receiver"
+   },
+   "say": "The negative pole is the source where electrons leave, while the positive pole is the receiver they are attracted to."
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How do motors work?",
+   "say": "Subscribe to How It Works! In the next episode we discover: how does an electric motor work?"
+  }
+ ],
+ "topic": "How Batteries Work",
+ "lang": "en"
+}

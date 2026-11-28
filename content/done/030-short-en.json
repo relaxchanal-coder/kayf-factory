@@ -1,0 +1,75 @@
+{
+ "id": "030-short-en",
+ "format": "short",
+ "theme": "cyan",
+ "title": "Why Doesn't the Space Station Fall? 🛰️",
+ "description": "The International Space Station orbits high above us at extreme speeds, but how does it stay up without crashing down? Discover the physics secret in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "space station",
+  "space",
+  "science",
+  "astronomy",
+  "physics"
+ ],
+ "thumb": {
+  "text": "Why Doesn't It|Fall Down?",
+  "emoji": "🛰️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🌌",
+   "text": "Our floating home in space",
+   "say": "The International Space Station flies four hundred kilometers above Earth. So why doesn't Earth's gravity pull it down?",
+   "image": "nasa international space station orbit"
+  },
+  {
+   "type": "icon",
+   "emoji": "🚀",
+   "caption": "It is all about speed",
+   "say": "The secret is not zero gravity. It is the extreme speed the station moves at."
+  },
+  {
+   "type": "stat",
+   "emoji": "⚡",
+   "number": 28000,
+   "unit": "kilometers per hour",
+   "label": "Massive station speed",
+   "say": "The station travels at twenty-eight thousand kilometers per hour, circling Earth every ninety minutes."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🚀",
+     "label": "Extreme horizontal speed"
+    },
+    {
+     "emoji": "🌍",
+     "label": "Curvature of the Earth"
+    },
+    {
+     "emoji": "🔄",
+     "label": "Continuous free fall"
+    }
+   ],
+   "say": "At this speed, the station is constantly falling toward Earth, but Earth curves away beneath it, so it keeps orbiting without crashing."
+  },
+  {
+   "type": "fact",
+   "emoji": "☀️",
+   "text": "Sixteen sunrises every single day",
+   "say": "Because of this blazing speed, astronauts watch the sun rise and set sixteen times every single day.",
+   "image": "nasa sunrise space station earth"
+  },
+  {
+   "type": "outro",
+   "text": "Next: How do space telescopes work?",
+   "say": "Subscribe to How It Works! Next time, we discover how telescopes see the deepest parts of the universe."
+  }
+ ],
+ "topic": "How the International Space Station works",
+ "lang": "en"
+}

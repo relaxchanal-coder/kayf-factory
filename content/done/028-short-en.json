@@ -1,0 +1,97 @@
+{
+ "id": "028-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "How Do Submarines Dive And Surface? 🚢",
+ "description": "Ever wonder how massive metal submarines dive deep into the ocean and float right back up with total ease? Discover the mind-blowing physics behind it.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "submarine",
+  "physics",
+  "science",
+  "ocean",
+  "deep sea"
+ ],
+ "thumb": {
+  "text": "How Do They|Dive & Rise?",
+  "emoji": "🚢"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🌊",
+   "text": "Metal giant dives and rises",
+   "say": "How does this massive metal structure dive deep into the ocean and return to the surface with total ease?",
+   "image": "submarine underwater deep ocean"
+  },
+  {
+   "type": "icon",
+   "emoji": "⚖️",
+   "text": "Buoyancy and gravity principles",
+   "say": "Submarines rely on a simple physics principle, controlling their weight and volume relative to the surrounding water.",
+   "image": ""
+  },
+  {
+   "type": "steps",
+   "title": "How it dives",
+   "items": [
+    "Open submarine valves",
+    "Water floods the ballast tanks",
+    "Weight increases and it sinks"
+   ],
+   "say": "When the submarine wants to go down, special valves open to let water into internal tanks, increasing its weight to dive.",
+   "image": ""
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "💨",
+     "label": "Pump compressed air"
+    },
+    {
+     "emoji": "💧",
+     "label": "Push water outside"
+    },
+    {
+     "emoji": "⬆️",
+     "label": "Submarine surfaces"
+    }
+   ],
+   "say": "To surface, compressed air is pumped in forcefully to push the water out of the tanks, making it lighter so it floats instantly.",
+   "image": "submarine surface water spray"
+  },
+  {
+   "type": "fact",
+   "emoji": "🐟",
+   "text": "Inspired by fish swim bladders",
+   "badge": "Fact",
+   "say": "Did you know? The submarine system is entirely inspired by the swim bladder in fish, which controls their depth.",
+   "image": ""
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "⚓",
+    "label": "Diving",
+    "sub": "Fill tanks with water"
+   },
+   "left": {
+    "emoji": "⛵",
+    "label": "Floating",
+    "sub": "Fill tanks with air"
+   },
+   "say": "In short, filling the tanks with water makes it dive, and filling them with air makes it float to the surface.",
+   "image": ""
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How do airplanes fly?",
+   "say": "Subscribe to How It Works, and in the next episode we discover: how does a massive airplane fly in the air?",
+   "image": ""
+  }
+ ],
+ "topic": "How submarines work",
+ "lang": "en"
+}

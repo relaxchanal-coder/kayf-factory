@@ -1,0 +1,166 @@
+{
+ "id": "104-long-en",
+ "format": "long",
+ "theme": "purple",
+ "title": "How Does Your Phone Understand Your Voice? 🎙️",
+ "description": "How does your phone turn spoken words into precise text and commands? Take an amazing journey inside voice recognition technology.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "voice recognition",
+  "technology",
+  "artificial intelligence",
+  "smartphones",
+  "science"
+ ],
+ "thumb": {
+  "text": "How Does Phone|Understand You?",
+  "emoji": "🎙️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🗣️",
+   "text": "How phones understand your voice",
+   "say": "How does your phone instantly obey your commands, turning vibrating air into precise digital actions?",
+   "image": "person speaking smartphone microphone"
+  },
+  {
+   "type": "icon",
+   "emoji": "🎙️",
+   "caption": "The Microphone",
+   "say": "The journey starts when the microphone catches your voice. A thin diaphragm vibrates as sound wave pressure changes in the air."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🗣️",
+     "label": "Voice"
+    },
+    {
+     "emoji": "〰️",
+     "label": "Vibration"
+    },
+    {
+     "emoji": "⚡",
+     "label": "Electric current"
+    }
+   ],
+   "say": "This instant mechanical vibration turns into analog electrical signals, carrying your unique voice frequencies."
+  },
+  {
+   "type": "icon",
+   "emoji": "🔛",
+   "caption": "Analog to Digital Converter",
+   "say": "Digital processors don't understand analog signals. That is why a converter steps in to translate electrical signals into pure numbers."
+  },
+  {
+   "type": "stat",
+   "emoji": "📊",
+   "number": 16000,
+   "unit": "samples per second",
+   "label": "Sampling Rate",
+   "say": "Your phone takes sixteen thousand samples of your voice every single second to guarantee high accuracy."
+  },
+  {
+   "type": "steps",
+   "title": "Audio Spectrum Analysis",
+   "items": [
+    "Split sound into parts",
+    "Analyze different frequencies",
+    "Generate sound timeline"
+   ],
+   "say": "Software splits the audio into tiny pieces, analyzing frequencies to pinpoint phonemes and letters accurately."
+  },
+  {
+   "type": "fact",
+   "emoji": "🧠",
+   "text": "AI and Neural Networks",
+   "say": "Did you know? Modern systems rely on artificial neural networks that mimic the human brain in distinguishing words.",
+   "image": "artificial neural network abstraction"
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "❌",
+    "label": "The Past",
+    "sub": "Fixed audio rule matching"
+   },
+   "left": {
+    "emoji": "✅",
+    "label": "Present",
+    "sub": "Predicting context and odds"
+   },
+   "say": "In the past, systems looked for exact rule matches. Today, they predict probabilities based on context and full sentences."
+  },
+  {
+   "type": "icon",
+   "emoji": "☁️",
+   "caption": "Cloud Computing",
+   "say": "Some phones send these chopped-up data chunks over the internet to massive servers with huge natural language processing power."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "☁️",
+     "label": "Cloud Server"
+    },
+    {
+     "emoji": "🔍",
+     "label": "Dictionary Match"
+    },
+    {
+     "emoji": "📝",
+     "label": "Extract Meaning"
+    }
+   ],
+   "say": "Servers compare audio data with billions of stored patterns to extract words that perfectly match your speech."
+  },
+  {
+   "type": "fact",
+   "emoji": "📱",
+   "text": "On-Device AI Processing",
+   "say": "Thanks to modern processing chips, many phones now run this process locally without needing an internet connection.",
+   "image": "smartphone internal processor chip"
+  },
+  {
+   "type": "steps",
+   "title": "Executing The Command",
+   "items": [
+    "Convert voice to text",
+    "Interpret intent",
+    "Launch correct app"
+   ],
+   "say": "Once your voice becomes written text, the smart assistant interprets your intent and executes the command instantly."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🔊",
+    "label": "Noise",
+    "sub": "Background sounds and wind"
+   },
+   "left": {
+    "emoji": "🎯",
+    "label": "Filtering",
+    "sub": "Isolating speaker voice"
+   },
+   "say": "This tech requires blocking ambient noise and wind, using multiple microphones to separate your voice from background sounds."
+  },
+  {
+   "type": "fact",
+   "emoji": "🌍",
+   "text": "Supporting Dialects and Languages",
+   "say": "These systems train on millions of hours of recordings to understand various dialects and diverse voice tones."
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How phone cameras work",
+   "say": "Subscribe to How It Works, and in the next episode we discover: how do phone cameras capture high-resolution photos?"
+  }
+ ],
+ "topic": "How voice recognition works in phones",
+ "lang": "en"
+}

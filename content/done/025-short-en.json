@@ -1,0 +1,83 @@
+{
+ "id": "025-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "How Soap Destroys Germs in Seconds! 🧼",
+ "description": "Soap doesn't just wash away dirt; it completely destroys germs by tearing apart their fatty membranes. Discover the precise chemical battle between soap and viruses in one minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "soap",
+  "germs",
+  "science",
+  "chemistry",
+  "biology"
+ ],
+ "thumb": {
+  "text": "Soap Secret|Germ Killer",
+  "emoji": "🧼"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🧼",
+   "text": "Water alone is not enough",
+   "image": "soap bar with foam",
+   "say": "Why is water alone helpless against germs, while soap destroys them in mere seconds?"
+  },
+  {
+   "type": "icon",
+   "emoji": "🧬",
+   "caption": "Dual action molecule",
+   "say": "The secret lies in the soap molecule. It has a water-loving head and a fat-loving tail!"
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "💧",
+    "label": "Water only",
+    "sub": "Slides right off"
+   },
+   "left": {
+    "emoji": "🧼",
+    "label": "With soap",
+    "sub": "Breaks cell walls"
+   },
+   "say": "Most viruses and bacteria are protected by a fatty shield. Water just slides right past it, but soap attacks it head-on."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "🗡️",
+     "label": "Pierce the shield"
+    },
+    {
+     "emoji": "💥",
+     "label": "Destroy the germ"
+    },
+    {
+     "emoji": "🌊",
+     "label": "Wash away"
+    }
+   ],
+   "say": "The soap tail plunges into the fatty shield and rips it apart. The germ collapses, and the water washes it all away."
+  },
+  {
+   "type": "stat",
+   "emoji": "⏱️",
+   "number": 20,
+   "unit": "seconds",
+   "label": "Time needed to clean hands",
+   "image": "digital stopwatch countdown",
+   "say": "Soap molecules need at least twenty seconds to completely tear apart virus shells, so never rush your handwashing!"
+  },
+  {
+   "type": "outro",
+   "text": "Next: Alcohol hand sanitizer",
+   "say": "Subscribe to How It Works! Next time, we discover: how do alcohol sanitizers kill viruses?"
+  }
+ ],
+ "topic": "how soap kills germs",
+ "lang": "en"
+}

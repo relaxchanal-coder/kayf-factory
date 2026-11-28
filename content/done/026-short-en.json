@@ -1,0 +1,80 @@
+{
+ "id": "026-short-en",
+ "format": "short",
+ "theme": "purple",
+ "title": "How Does A Rainbow Form In The Sky? 🌈",
+ "description": "A rainbow is not just pretty colors in the sky... it is amazing optical engineering where light bends and splits! Discover the scientific secret.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "rainbows",
+  "physics",
+  "science",
+  "natural phenomena",
+  "rain"
+ ],
+ "thumb": {
+  "text": "How Rainbows|Really Form",
+  "emoji": "🌈"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🌧️",
+   "text": "Magic colors after the rain",
+   "say": "Ever wonder why a stunning rainbow appears in the sky right after the rain stops and the sun comes out?",
+   "image": "double rainbow sky clouds"
+  },
+  {
+   "type": "icon",
+   "emoji": "💧",
+   "caption": "Raindrops act as prisms",
+   "say": "Every single raindrop hanging in the air acts like a tiny glass prism that splits white light."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "☀️",
+     "label": "Light enters"
+    },
+    {
+     "emoji": "🔄",
+     "label": "Bends and reflects"
+    },
+    {
+     "emoji": "🎨",
+     "label": "Colors exit"
+    }
+   ],
+   "say": "When sunlight enters the water drop, it bends, reflects off the back wall, and bends again as it exits."
+  },
+  {
+   "type": "fact",
+   "emoji": "👁️",
+   "text": "Specific viewing angle",
+   "say": "The spectrum colors exit at a precise angle of about forty-two degrees relative to the viewer's eye."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "⭕",
+    "label": "Actual shape",
+    "sub": "Full circle"
+   },
+   "left": {
+    "emoji": "🌙",
+    "label": "What we see",
+    "sub": "Just an arc"
+   },
+   "say": "Amazingly, a rainbow is actually a complete circle, but we only see half of it because the ground blocks the rest."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How does lightning work?",
+   "say": "Subscribe to How It Works! In the next episode, we discover: how does terrifying lightning form in storms?"
+  }
+ ],
+ "topic": "How rainbows work",
+ "lang": "en"
+}

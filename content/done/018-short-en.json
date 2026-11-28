@@ -1,0 +1,81 @@
+{
+ "id": "018-short-en",
+ "format": "short",
+ "theme": "cyan",
+ "title": "How Does an AC Cool Your Room? ❄️",
+ "description": "How does an air conditioner transform scorching outdoor air into a refreshing breeze? Discover the amazing scientific secret behind cooling in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "air conditioner",
+  "cooling",
+  "science",
+  "physics",
+  "facts"
+ ],
+ "thumb": {
+  "text": "How AC|Cooling Works",
+  "emoji": "❄️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🌡️",
+   "text": "How does AC cool air?",
+   "image": "air conditioner compressor outdoors",
+   "say": "How does an air conditioner turn blazing hot air into a cool, refreshing breeze? The secret is all in the physics."
+  },
+  {
+   "type": "icon",
+   "emoji": "🧪",
+   "caption": "Refrigerant Gas",
+   "say": "The AC doesn't just create cold out of nowhere. It uses a special liquid called refrigerant to absorb heat from your room."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "💨",
+     "label": "Absorbs heat"
+    },
+    {
+     "emoji": "⚙️",
+     "label": "Compresses gas"
+    },
+    {
+     "emoji": "🧊",
+     "label": "Releases cold"
+    }
+   ],
+   "say": "The gas flows through a pressure valve to get super cold, then a fan blows room air right across it."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🔥",
+    "label": "Outdoor unit",
+    "sub": "Pumps heat outside"
+   },
+   "left": {
+    "emoji": "❄️",
+    "label": "Indoor unit",
+    "sub": "Absorbs indoor heat"
+   },
+   "say": "The indoor unit absorbs the heat, while the outdoor unit dumps that exact heat outside your building."
+  },
+  {
+   "type": "fact",
+   "emoji": "💧",
+   "text": "Water drops are condensed air",
+   "image": "water drops air conditioner pipe",
+   "say": "Notice that water dripping from the AC pipe? That is not a leak. It is simply air moisture condensing as it cools down."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How do bullet trains work?",
+   "say": "Subscribe to How It Works, and don't miss our next episode where we discover how bullet trains speed across tracks nonstop!"
+  }
+ ],
+ "topic": "How Air Conditioning Works",
+ "lang": "en"
+}

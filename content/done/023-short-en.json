@@ -1,0 +1,73 @@
+{
+ "id": "023-short-en",
+ "format": "short",
+ "theme": "blue",
+ "title": "How Does An MRI Scan See Inside Your Brain? 🧠",
+ "description": "Discover how an MRI machine looks inside your body without surgery or harmful radiation. Learn the amazing physics behind it in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "mri",
+  "science",
+  "medicine",
+  "physics",
+  "scientific facts"
+ ],
+ "thumb": {
+  "text": "How MRI Sees|Your Brain!",
+  "emoji": "🧠"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "🧲",
+   "text": "Imaging your brain inside!",
+   "say": "How does an MRI machine capture precise details of your brain without any surgery or harmful X-rays?"
+  },
+  {
+   "type": "icon",
+   "emoji": "💧",
+   "caption": "Water molecules in the body",
+   "say": "The human body is full of water. Water contains hydrogen atoms that act like tiny magnetic compasses."
+  },
+  {
+   "type": "stat",
+   "emoji": "⚡",
+   "number": "twenty thousand",
+   "unit": "times",
+   "label": "Stronger than Earth's magnet",
+   "say": "The device contains a giant magnet, twenty thousand times stronger than Earth's magnetic field, forcing all these tiny compasses to line up in one direction."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "📻",
+     "label": "Send radio waves"
+    },
+    {
+     "emoji": "🔄",
+     "label": "Deflect the atoms"
+    },
+    {
+     "emoji": "📊",
+     "label": "Send signals to device"
+    }
+   ],
+   "say": "Then the machine sends short radio pulses, knocking the atoms off track. When they snap back, they send signals that a computer turns into incredible images."
+  },
+  {
+   "type": "fact",
+   "emoji": "🔊",
+   "text": "Loud noise from coil vibration",
+   "say": "Ever noticed the loud noise inside the machine? That happens because electric current presses on the magnetic coils and vibrates at high speed."
+  },
+  {
+   "type": "outro",
+   "text": "Next episode: How lasers work!",
+   "say": "Subscribe to How It Works, and don't miss the next episode to discover together: how does a laser beam work?"
+  }
+ ],
+ "topic": "How MRI Works",
+ "lang": "en"
+}

@@ -1,0 +1,88 @@
+{
+ "id": "021-short-en",
+ "format": "short",
+ "theme": "green",
+ "title": "How Do Radars See Planes in the Dark? ✈️",
+ "description": "Discover how radar detects planes, clouds, and cars from miles away. Learn how sending and bouncing waves works in under a minute.",
+ "tags": [
+  "how it works",
+  "كيف يعمل",
+  "radar",
+  "technology",
+  "physics",
+  "science",
+  "facts"
+ ],
+ "thumb": {
+  "text": "How Radars See|In The Dark?",
+  "emoji": "✈️"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "emoji": "📡",
+   "text": "Sees planes in the dark!",
+   "say": "How does radar spot planes and cars in total darkness and heavy fog from miles away?",
+   "image": "radar antenna rotating sky"
+  },
+  {
+   "type": "icon",
+   "emoji": "📻",
+   "caption": "Sending radio pulses",
+   "say": "The device shoots out short pulses of radio waves in every direction through space."
+  },
+  {
+   "type": "flow",
+   "items": [
+    {
+     "emoji": "📡",
+     "label": "Send Wave"
+    },
+    {
+     "emoji": "✈️",
+     "label": "Hit Object"
+    },
+    {
+     "emoji": "↩️",
+     "label": "Echo Bounce"
+    }
+   ],
+   "say": "When these waves smash into a solid object like a plane, they bounce right back as an echo."
+  },
+  {
+   "type": "stat",
+   "emoji": "⚡",
+   "number": 186000,
+   "unit": "miles per second",
+   "label": "Speed of light and waves",
+   "say": "These waves travel at the speed of light, which is one hundred eighty-six thousand miles per second."
+  },
+  {
+   "type": "fact",
+   "emoji": "⏱️",
+   "text": "Distance measured by echo time",
+   "say": "Radar calculates the exact distance by measuring how long the wave took to return."
+  },
+  {
+   "type": "compare",
+   "right": {
+    "emoji": "🦇",
+    "label": "Nature",
+    "sub": "Bat echolocation"
+   },
+   "left": {
+    "emoji": "📡",
+    "label": "Tech",
+    "sub": "Radar waves"
+   },
+   "say": "This method is just like how bats find their prey by bouncing sounds off objects."
+  },
+  {
+   "type": "outro",
+   "text": "Next: How do GPS satellites work?",
+   "say": "Subscribe to How It Works, and next time we reveal: how do satellites beam down signals?"
+  }
+ ],
+ "topic": "How radar works",
+ "lang": "en"
+}
