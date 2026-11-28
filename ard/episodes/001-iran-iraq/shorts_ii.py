@@ -116,6 +116,8 @@ def make_short(name, k_from, k_to, title, end_len=2.8):
         out.stdin.write(frame.tobytes())
     out.stdin.close()
     out.wait()
+    vin.stdout.close()
+    vin.kill()
     vin.wait()
     subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', tmp, '-ss', f'{t0:.3f}', '-t', f'{clip:.3f}', '-i', 'build/mix.wav',
                     '-filter_complex', f'[1:a]afade=t=out:st={clip - 0.4:.2f}:d=0.4,apad=whole_dur={total:.2f}[a]',
