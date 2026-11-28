@@ -31,6 +31,16 @@ TH={
 "r7":dict(poff=2,acc="#d2600f",acc2="#8a3a05",txt="#2a1d12",txt2="#4a3a2a",txt3="#6d5c4a",bg=("#fbf4e6","#efe3cb","#e2d2b2"),land="#e6d5b3",pat="rays",Q="cairo",A="cairo",rad="18px"),
 "L-":dict(poff=5,acc="#cfd8e3",acc2="#ffffff",txt="#f2f5f8",txt2="#d2dae3",txt3="#9aa6b3",bg=("#1b2230","#0d1118","#030507"),land="#263040",pat="stars",Q="aref-ruqaa",A="amiri",rad="10px"),
 }
+STYLES={
+"dunes":dict(bg="dunes",tr="iris",ent="up",sub="bar",frame="arch",part="sparks",cam="push",pal="earth",Q="aref-ruqaa",A="amiri"),
+"cosmic":dict(bg="cosmic",tr="zoom",ent="scale",sub="big",frame="ring",part="none",cam="drift",pal="sea",Q="reem-kufi",A="cairo"),
+"tiles":dict(bg="tiles",tr="blinds",ent="right",sub="box",frame="star",part="dust",cam="push",pal="royal",Q="aref-ruqaa",A="amiri"),
+"aurora":dict(bg="aurora",tr="dots",ent="flip",sub="bar",frame="hex",part="snow",cam="none",pal="neon",Q="marhey",A="cairo"),
+"film":dict(bg="film",tr="shutter",ent="skew",sub="big",frame="corners",part="bokeh",cam="push",pal="fire",Q="baloo-bhaijaan-2",A="cairo"),
+"mosaic":dict(bg="poly",tr="slide",ent="left",sub="box",frame="hex",part="sparks",cam="drift",pal="jewel",Q="reem-kufi",A="amiri"),
+"sun":dict(bg="rays",tr="sweep",ent="scale",sub="bar",frame="arch",part="dust",cam="push",pal="fire",Q="aref-ruqaa",A="cairo"),
+"neon":dict(bg="glow",tr="glitch",ent="up",sub="big",frame="corners",part="bokeh",cam="drift",pal="neon",Q="baloo-bhaijaan-2",A="cairo"),
+}
 def rgb(h): h=h.lstrip("#"); return ",".join(str(int(h[i:i+2],16)) for i in (0,2,4))
 def theme(s,th):
     fp=lambda f,w: F+f"/{f}/files/{f}-arabic-{w}-normal.woff2"
@@ -52,13 +62,18 @@ def build(d):
         s["dur"]=round(L+(0.55 if s["type"]!="outro" else 1.6),3); t+=s["dur"]
     st["total"]=round(t+0.3,3); st["img"]="file:///nonexistent"; st["logo"]="file://"+HZ+"/logo.png"
     json.dump(st,open(f"{d}/timeline.json","w"),ensure_ascii=False)
-    s=open(HZ+"/engine/story5.html").read()
+    s=open(HZ+"/engine/story6.html").read()
     V=st["o"]=="v"; s=s.replace("__W__","1080" if V else "1920").replace("__H__","1920" if V else "1080")
     key=os.path.basename(d.rstrip("/"))[:2]; th=TH.get(key) or dict(TH[["r1","r3","r6","r2","r5","r4","L-"][sum(map(ord,key))%7]],poff=sum(map(ord,key))%8)
     fp=lambda f,w: F+f"/{f}/files/{f}-arabic-{w}-normal.woff2"
     s=s.replace("__QFONT__",fp(th["Q"],700)).replace("__AFONT__",fp(th["A"],700))
     s=s.replace("__ILL__",open(HZ+"/engine/ill.js").read())
     s=s.replace("__D3__",NM+"/d3/dist/d3.min.js").replace("__TOPO__",NM+"/topojson-client/dist/topojson-client.min.js")
+    sy=st.get("style")
+    if isinstance(sy,str): sy=STYLES[sy]
+    if sy:
+        st["style"]=sy
+        s=s.replace(fp(th["Q"],700),fp(sy.get("Q",th["Q"]),700)).replace(fp(th["A"],700),fp(sy.get("A",th["A"]),700))
     st["poff"]=th.get("poff",0); st["rad"]=th["rad"]
     s=s.replace("__WORLD__",open(NM+"/world-atlas/countries-50m.json").read()).replace("__DATA__",json.dumps(st,ensure_ascii=False))
     open(f"{d}/built.html","w").write(s); return st
