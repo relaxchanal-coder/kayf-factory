@@ -1,0 +1,23 @@
+name: ard-tts
+on:
+  push:
+    branches: [ard]
+    paths: ['ard/tts/*.json']
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: pip install -q edge-tts
+      - name: existing audio
+        run: |
+          git fetch -q --depth 1 origin ard-audio && git worktree add -q pub origin/ard-audio || (git worktree add -q --detach pub && cd pub && git checkout -q --orphan ard-audio && git rm -rfq . )
+          mkdir -p out && cp -r pub/* out/ 2>/dev/null || true
+      - run: python ard/tts.py
+      - name: publish
+        run: |
+          git config --global user.name ard-bot; git config --global user.email ard-bot@users.noreply.github.com
+          cp -r out/* pub/
+          cd pub && git add -A && (git commit -qm "ard audio" && git push -q origin HEAD:ard-audio) || echo nothing
